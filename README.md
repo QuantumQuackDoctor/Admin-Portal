@@ -1,3 +1,20 @@
+# General information
+
+Prefix all classnames and ids with component name
+ex.
+
+```
+.Header-link
+```
+
+# How to add the header to a route
+
+```
+<Header>
+    Any child components of header will be properly aligned with it. Header will obscure components on the left side.
+</Header>
+```
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
