@@ -5,9 +5,9 @@ import {
   FaTimes,
   FaUser,
   FaHamburger,
-  FaSignInAlt,
   FaHome,
   FaUserEdit,
+  FaCar,
 } from "react-icons/fa";
 import { useEffect, useState } from "react";
 
@@ -15,9 +15,9 @@ import { useEffect, useState } from "react";
 const paths = [
   { name: "Home", icon: <FaHome />, path: "/home" },
   { name: "Users", icon: <FaUser />, path: "/users" },
+  { name: "Drivers", icon: <FaCar />, path: "/drivers" },
   { name: "Restaurants", icon: <FaHamburger />, path: "/restaurants" },
   { name: "Account", icon: <FaUserEdit />, path: "/account" },
-  { name: "Login", icon: <FaSignInAlt />, path: "/login" },
 ];
 const Header = ({ children }) => {
   const [open, setOpen] = useState(false);
@@ -29,7 +29,8 @@ const Header = ({ children }) => {
     if (window.innerWidth > 800 && open === false) setOpen(true);
   }, [open]);
   return (
-    <div>
+    <div className="Header-container">
+      <div className="Header-spacer">{children}</div>
       <nav className="Header-nav">
         {!open ? (
           <FaBars
@@ -43,13 +44,13 @@ const Header = ({ children }) => {
           />
         )}
         <div className={open ? "Header-links-open" : "Header-links"}>
-          {paths.map((data) => {
+          {paths.map((data, index) => {
             let classes =
               location.pathname === data.path
                 ? "Header-link Header-link-open"
                 : "Header-link";
             return (
-              <Link to={data.path} className={classes}>
+              <Link to={data.path} key={index} className={classes}>
                 {data.icon}
                 <span className="Header-margin-left">{data.name}</span>
               </Link>
@@ -57,7 +58,6 @@ const Header = ({ children }) => {
           })}
         </div>
       </nav>
-      <div className="Header-spacer">{children}</div>
     </div>
   );
 };

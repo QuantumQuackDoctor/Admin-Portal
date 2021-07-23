@@ -1,13 +1,12 @@
 import { BrowserRouter } from "react-router-dom";
+import { WidgetContainer, Widget } from "./shared/widget/Widget";
 import "./App.css";
 import Header from "./shared/header/Header";
 
 function App() {
   return (
     <BrowserRouter>
-      <Header>
-        <div style={{ color: "white" }}>Test</div>
-      </Header>
+      <Header></Header>
     </BrowserRouter>
   );
 }

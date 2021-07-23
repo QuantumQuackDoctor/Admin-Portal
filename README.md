@@ -1,11 +1,27 @@
 # General information
 
+## CSS
+
 Prefix all classnames and ids with component name
 ex.
 
 ```
 .Header-link
 ```
+
+## style
+
+Main pages will display data using widgets, these should redirect to more specific pages if needed.
+
+```
+<WidgetContainer>
+    <Widget title="Title">
+        content goes here
+    </Widget>
+</WidgetContainer>
+```
+
+Widget container handles layout, Widget applies some default styles and adds a close button
 
 # How to add the header to a route
 
