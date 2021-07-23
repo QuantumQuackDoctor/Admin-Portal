@@ -11,8 +11,9 @@ ex.
 
 ```
 <Header>
-    Any child components of header will be properly aligned with it. Header will obscure components on the left side.
+    Any child components of header will be properly aligned with it.
 </Header>
+Any components specified here will be partially covered by header
 ```
 
 # Getting Started with Create React App
