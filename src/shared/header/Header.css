@@ -1,6 +1,6 @@
 .Header-nav {
   position: fixed;
-  height: 5vh;
+  height: 60px;
   background-color: var(--color-main);
   transition: all 0.5s ease-in-out;
   display: flex;
@@ -8,14 +8,14 @@
   align-items: center;
   overflow-x: hidden;
   bottom: 0;
-  padding: 2em;
+  padding: 1em;
   right: 0;
   left: 0;
 }
 .Header-links,
 .Header-links-open {
   position: fixed;
-  width: min(50vw, 300px);
+  width: clamp(180px, 50vw, 300px);
   height: 100vh;
   background-color: var(--bg-light);
   top: 0;
@@ -41,16 +41,35 @@
 
 .Header-spacer {
   padding-left: 0;
+  padding-bottom: 60px;
+  overflow-y: auto;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
+.Header-spacer::-webkit-scrollbar {
+  display: none;
+}
 .Header-link {
   color: var(--color-light);
   text-decoration: none;
-  margin-top: 2em;
+  padding: 0.5em;
+  width: 100%;
+}
+
+.Header-link-open {
+  border-radius: 10px;
+  background-color: var(--color-light);
+  color: var(--bg-main);
 }
 
 .Header-margin-left {
   margin-left: 0.3em;
+  transition: margin-left 0.2s ease-in-out;
+}
+
+.Header-link:hover .Header-margin-left {
+  margin-left: 0.5em;
 }
 
 @media only screen and (min-width: 800px) {
@@ -60,13 +79,14 @@
 
   .Header-links-open,
   .Header-links {
-    width: clamp(150px, 17vw, 300px);
+    width: clamp(180px, 17vw, 220px);
     left: 0;
     align-items: flex-start;
     visibility: visible;
   }
 
   .Header-spacer {
-    padding-left: clamp(150px, 17vw, 300px);
+    margin-left: clamp(180px, 17vw, 220px);
+    padding-bottom: 0;
   }
 }

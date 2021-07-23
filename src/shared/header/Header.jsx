@@ -1,10 +1,27 @@
 import "./Header.css";
-import { Link } from "react-router-dom";
-import { FaBars, FaTimes, FaUser, FaHamburger } from "react-icons/fa";
+import { Link, useLocation } from "react-router-dom";
+import {
+  FaBars,
+  FaTimes,
+  FaUser,
+  FaHamburger,
+  FaSignInAlt,
+  FaHome,
+  FaUserEdit,
+} from "react-icons/fa";
 import { useEffect, useState } from "react";
 
-const Header = (props) => {
+//Add navigation links here !!!!
+const paths = [
+  { name: "Home", icon: <FaHome />, path: "/home" },
+  { name: "Users", icon: <FaUser />, path: "/users" },
+  { name: "Restaurants", icon: <FaHamburger />, path: "/restaurants" },
+  { name: "Account", icon: <FaUserEdit />, path: "/account" },
+  { name: "Login", icon: <FaSignInAlt />, path: "/login" },
+];
+const Header = ({ children }) => {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
   const toggleOpen = () => {
     setOpen(!open);
   };
@@ -26,17 +43,21 @@ const Header = (props) => {
           />
         )}
         <div className={open ? "Header-links-open" : "Header-links"}>
-          <Link to="/users" className="Header-link">
-            <FaUser />
-            <span className="Header-margin-left">Users</span>
-          </Link>
-          <Link to="/restaurants" className="Header-link">
-            <FaHamburger />
-            <span className="Header-margin-left">Restaurants</span>
-          </Link>
+          {paths.map((data) => {
+            let classes =
+              location.pathname === data.path
+                ? "Header-link Header-link-open"
+                : "Header-link";
+            return (
+              <Link to={data.path} className={classes}>
+                {data.icon}
+                <span className="Header-margin-left">{data.name}</span>
+              </Link>
+            );
+          })}
         </div>
       </nav>
-      <div className="Header-spacer">{props.children}</div>
+      <div className="Header-spacer">{children}</div>
     </div>
   );
 };
