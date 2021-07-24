@@ -2,12 +2,14 @@ import { BrowserRouter } from "react-router-dom";
 import { WidgetContainer } from "./shared/widget/Widget";
 import "./App.css";
 import Header from "./shared/header/Header";
-import { FormBuilder } from "./shared/form-widget/FormWidget";
+import { FormBuilder, Validators } from "./shared/form-widget/FormWidget";
 import { FaAngleDown } from "react-icons/fa";
 
 function App() {
   let builder = new FormBuilder();
-  builder.addField("test", "test", null, "placeholder");
+  builder.addField("test", "test", null, "placeholder", "required", [
+    Validators.Required,
+  ]);
   return (
     <BrowserRouter>
       <Header>

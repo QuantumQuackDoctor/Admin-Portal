@@ -13,9 +13,8 @@ const FormWidget = ({ fields, onSubmit }) => {
     return {
       id: index,
       name: field.name,
-      value: "",
+      currentValue: "",
       validators: field.validators,
-      errorMessage: field.errorMessage,
       displayError: false,
     };
   });
@@ -27,11 +26,11 @@ const FormWidget = ({ fields, onSubmit }) => {
           if (field.id === id) {
             let hasError = false;
             field.validators.forEach((validator) => {
-              if (!validator(e.target.value)) hasError = true;
+              if (!validator.call(validator, e.target.value)) hasError = true;
             });
             return {
               ...field,
-              value: e.target.value,
+              currentValue: e.target.value,
               displayError: hasError,
             };
           }
@@ -41,36 +40,58 @@ const FormWidget = ({ fields, onSubmit }) => {
     };
   };
   const createSelector = (id) => {
-    return formState.find((field) => field.id === id).value;
+    return formState.find((field) => field.id === id);
   };
 
   const formSubmit = (e) => {
     e.preventDefault();
-    //TODO check validators
 
-    let formValue = {};
+    let allFieldsValid = true;
     formState.forEach((field) => {
-      formValue[field.name] = field.value;
+      field.validators.forEach((validator) => {
+        if (!validator.call(validator, field.currentValue))
+          allFieldsValid = false;
+      });
     });
-    onSubmit(formValue);
+
+    if (allFieldsValid) {
+      let formValue = {};
+      formState.forEach((field) => {
+        formValue[field.name] = field.currentValue;
+      });
+      onSubmit(formValue);
+    }
   };
   return (
     <Widget>
       <form onSubmit={formSubmit}>
         {fields.map((field, index) => {
-          let id = nanoid();
+          //index is state id, nanoid is css id
+          let elementId = nanoid();
           return (
             <div key={index}>
-              <label htmlFor={id}>{field.label}</label>
-              {field.icon}
-              <input
-                id={id}
-                value={createSelector(index)}
-                onChange={createUpdator(index)}
-                placeholder={field.placeholder}
-                type={field.type}
-                name={field.name}
-              ></input>
+              <span
+                className="FormWidget-error"
+                style={{
+                  visibility: createSelector(index).displayError
+                    ? "visible"
+                    : "hidden",
+                }}
+              >
+                {field.errorMessage}
+              </span>
+              <div>
+                <label htmlFor={elementId}>{field.label}</label>
+                {field.icon}
+                <input
+                  id={elementId}
+                  value={createSelector(index).value}
+                  onChange={createUpdator(index)}
+                  placeholder={field.placeholder}
+                  type={field.type}
+                  name={field.name}
+                ></input>
+              </div>
             </div>
           );
         })}
@@ -142,12 +163,12 @@ export class FormBuilder {
   validate(fields) {
     fields.forEach((field) => {
       if (
-        !fields.name ||
-        !fields.label ||
-        !fields.inputType ||
-        !fields.value ||
-        !fields.validators ||
-        Array.isArray(fields.validators)
+        !field.name ||
+        !field.label ||
+        !field.inputType ||
+        !field.value ||
+        !field.validators ||
+        Array.isArray(field.validators)
       )
         return false;
     });
@@ -167,9 +188,6 @@ export const Validators = {
     return true;
   },
   Required: (input) => {
-    return input;
-  },
-  NotBlank: (input) => {
-    return input !== "";
+    return !!input;
   },
 };
