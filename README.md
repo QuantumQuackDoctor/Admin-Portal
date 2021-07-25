@@ -23,6 +23,32 @@ Main pages will display data using widgets, these should redirect to more specif
 
 Widget container handles layout, Widget applies some default styles and adds a close button
 
+## Form Builder
+
+formbuilder is a utility for making fairly customizable form widgets
+general usage
+
+```
+let builder = new FormBuilder("testTitle")
+    .addField("test", "test")
+    .setPlaceholder("placeholder")
+    .setValidators([Validators.Required])
+    .setErrorMessage("required")
+    .and()
+    .addField("2", "2")
+    .setPlaceholder("placeholder2")
+    .setIcon(<FaThemeisle />)
+    .and();
+```
+
+```
+<WidgetContainer>
+    {builder.build((value) => {
+    console.log(value);
+    })}
+</WidgetContainer>
+```
+
 # How to add the header to a route
 
 ```

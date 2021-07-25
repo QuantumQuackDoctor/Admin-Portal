@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
 import { useState } from "react";
+import { FaThemeisle } from "react-icons/fa";
 import { Widget } from "../widget/Widget";
 
 /**
@@ -7,7 +8,7 @@ import { Widget } from "../widget/Widget";
  * @param {Array} fields
  * @returns
  */
-const FormWidget = ({ fields, onSubmit }) => {
+const FormWidget = ({ title, fields, onSubmit }) => {
   //construct state from fields
   let initialState = fields.map((field, index) => {
     return {
@@ -63,7 +64,7 @@ const FormWidget = ({ fields, onSubmit }) => {
     }
   };
   return (
-    <Widget>
+    <Widget title={title}>
       <form onSubmit={formSubmit}>
         {fields.map((field, index) => {
           //index is state id, nanoid is css id
@@ -111,68 +112,111 @@ export class FormBuilder {
    *
    * @param {Array} fields array of desired fields
    */
-  constructor(fields = []) {
-    if (this.validate(fields)) this.fields = fields;
-    else this.fields = [];
+  constructor(title = "") {
+    this.fields = [];
+    this.title = title;
   }
 
   /**
    *
    * @param {string} label
    * @param {string} name
-   * @param {object} icon
-   * @param {string} value
-   * @param {string} inputType
-   * @param {string} placeholder
-   * @param {Array} validators
-   * @param {string} errorMessage
+   * @returns FormFieldBuilder
    */
-  addField(
-    label,
-    name,
-    icon,
-    placeholder = "",
-    errorMessage = "",
-    validators = [],
-    value = "",
-    inputType = "text"
-  ) {
-    if (label && name && Array.isArray(validators)) {
-      this.fields.push({
-        label,
-        name,
-        icon,
-        value,
-        inputType,
-        placeholder,
-        validators,
-        errorMessage,
-      });
-    } else console.log("invalid field");
+  addField(label, name) {
+    if (!label || !name) throw new Error("Invalid field");
+    let newField = new FormFieldBuilder(this, label, name);
+    this.fields.push(newField);
+    return newField;
+  }
+
+  setTitle(title) {
+    this.title = title;
   }
 
   /**
    *
-   * @param {Function} onSubmit
+   * @param {Function} onSubmit function called on form submit, function input will be name value pairs for all form fields
    * @returns FormWidget
    */
   build(onSubmit) {
-    return <FormWidget fields={this.fields} onSubmit={onSubmit} />;
+    return (
+      <FormWidget
+        title={this.title}
+        fields={this.fields.map((fieldBuilder) => fieldBuilder.build())}
+        onSubmit={onSubmit}
+      />
+    );
+  }
+}
+
+export class FormFieldBuilder {
+  constructor(callingObject, label, name) {
+    this.fieldValues = {
+      label,
+      name,
+      icon: null,
+      currentValue: "",
+      inputType: "text",
+      placeholder: "",
+      validators: [],
+      errorMessage: "",
+    };
+
+    this.callingObject = callingObject;
   }
 
-  validate(fields) {
-    fields.forEach((field) => {
-      if (
-        !field.name ||
-        !field.label ||
-        !field.inputType ||
-        !field.value ||
-        !field.validators ||
-        Array.isArray(field.validators)
-      )
-        return false;
-    });
-    return true;
+  build() {
+    return this.fieldValues;
+  }
+
+  setIcon(icon) {
+    this.fieldValues.icon = icon;
+    return this;
+  }
+
+  setInitialValue(initialValue) {
+    this.fieldValues.currentValue = initialValue;
+    return this;
+  }
+
+  setInputType(inputType) {
+    this.fieldValues.inputType = inputType;
+    return this;
+  }
+
+  setPlaceholder(placeholder) {
+    this.fieldValues.placeholder = placeholder;
+    return this;
+  }
+
+  /**
+   *
+   * @param {Array} validators array of functions of type (input: text) => true/false
+   */
+  setValidators(validators) {
+    if (Array.isArray(validators)) {
+      this.fieldValues.validators = validators;
+      return this;
+    } else throw new Error("Must be an array");
+  }
+
+  addValidator(validator) {
+    this.fieldValues.validators.push(validator);
+    return this;
+  }
+
+  setErrorMessage(message) {
+    this.fieldValues.errorMessage = message;
+    return this;
+  }
+
+  /**
+   *
+   * @returns {FormBuilder}
+   */
+  and() {
+    return this.callingObject;
   }
 }
 
@@ -180,7 +224,7 @@ export const Validators = {
   Pattern: (regex) => {
     if (!regex instanceof RegExp) regex = new RegExp(regex);
     return (input) => {
-      return input.match(regex);
+      return input.test(regex);
     };
   },
   Email: (input) => {
