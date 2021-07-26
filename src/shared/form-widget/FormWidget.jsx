@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { useState } from "react";
-import { FaThemeisle } from "react-icons/fa";
 import { Widget } from "../widget/Widget";
+import "./FormWidget.css";
 
 /**
  *
@@ -65,12 +65,12 @@ const FormWidget = ({ title, fields, onSubmit }) => {
   };
   return (
     <Widget title={title}>
-      <form onSubmit={formSubmit}>
+      <form onSubmit={formSubmit} className="FormWidget-form">
         {fields.map((field, index) => {
           //index is state id, nanoid is css id
           let elementId = nanoid();
           return (
-            <div key={index}>
+            <div key={index} className="FormWidget-field-container">
               <span
                 className="FormWidget-error"
                 style={{
@@ -81,9 +81,11 @@ const FormWidget = ({ title, fields, onSubmit }) => {
               >
                 {field.errorMessage}
               </span>
-              <div>
-                <label htmlFor={elementId}>{field.label}</label>
-                {field.icon}
+              <div className="FormWidget-input">
+                <div className="FormWidget-label">
+                  {field.icon}
+                  <label htmlFor={elementId}>{field.label}</label>
+                </div>
                 <input
                   id={elementId}
                   value={createSelector(index).value}
@@ -91,12 +93,12 @@ const FormWidget = ({ title, fields, onSubmit }) => {
                   placeholder={field.placeholder}
                   type={field.type}
                   name={field.name}
-                ></input>
+                />
               </div>
             </div>
           );
         })}
-        <input type="submit" />
+        <input type="submit" className="FormWidget-submit" />
       </form>
     </Widget>
   );
