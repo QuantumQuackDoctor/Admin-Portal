@@ -9,6 +9,23 @@ ex.
 .Header-link
 ```
 
+## Services
+
+Services will be provided use context, add services in the ServiceProvider and create a custom hook for them
+
+```
+const services = {
+    authentication: new AuthService(),
+};
+```
+
+```
+export const useAuth = () => {
+  return useContext(ServiceContext).authentication;
+};
+
+```
+
 ## style
 
 Main pages will display data using widgets, these should redirect to more specific pages if needed.
@@ -53,9 +70,11 @@ let builder = new FormBuilder("testTitle")
 
 ```
 <Header>
-    Any child components of header will be properly aligned with it. Header will obscure components on the left side.
+    Any child components of header will be properly aligned with it.
 </Header>
 ```
+
+Components outside of header will be covered on the left and bottom
 
 # Getting Started with Create React App
 

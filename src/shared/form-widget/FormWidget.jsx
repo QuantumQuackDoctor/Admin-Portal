@@ -63,7 +63,7 @@ const FormWidget = ({ title, fields, onSubmit }) => {
       })
     );
 
-    if (allFieldsValid) {
+    if (allFieldsValid && onSubmit) {
       let formValue = {};
       formState.forEach((field) => {
         formValue[field.name] = field.currentValue;

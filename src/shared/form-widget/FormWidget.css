@@ -47,3 +47,7 @@
 .FormWidget-error {
   color: red;
 }
+
+.FormWidget-label > label {
+  margin-left: 0.3em;
+}
