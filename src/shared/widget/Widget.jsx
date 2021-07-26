@@ -17,7 +17,11 @@ export const Widget = ({ children, title, rows, columns }) => {
       className="Widgets-widget"
       style={{ gridColumn: columns || "auto", gridRow: rows || "auto" }}
     >
-      <div className="Widgets-title-bar" onClick={toggleDisplay}>
+      <div
+        data-testid="title-bar"
+        className="Widgets-title-bar"
+        onClick={toggleDisplay}
+      >
         {title}
         {display ? (
           <FaAngleUp className="Widgets-display-icon" />
@@ -27,6 +31,7 @@ export const Widget = ({ children, title, rows, columns }) => {
       </div>
       <div
         className="Widgets-children-container"
+        data-testid="widget-children"
         style={{
           display: display ? "block" : "none",
         }}

@@ -10,7 +10,7 @@ function App() {
     .addField("test", "test")
     .setPlaceholder("placeholder")
     .setValidators([Validators.Required])
-    .setErrorMessage("required")
+    .setErrorMessage("*required")
     .and()
     .addField("2", "2")
     .setPlaceholder("placeholder2")

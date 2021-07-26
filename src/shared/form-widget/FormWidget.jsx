@@ -48,12 +48,20 @@ const FormWidget = ({ title, fields, onSubmit }) => {
     e.preventDefault();
 
     let allFieldsValid = true;
-    formState.forEach((field) => {
-      field.validators.forEach((validator) => {
-        if (!validator.call(validator, field.currentValue))
-          allFieldsValid = false;
-      });
-    });
+    setFormState(
+      formState.map((field) => {
+        for (const validator of field.validators) {
+          if (!validator.call(validator, field.currentValue)) {
+            allFieldsValid = false;
+            return {
+              ...field,
+              displayError: true,
+            };
+          }
+        }
+        return field;
+      })
+    );
 
     if (allFieldsValid) {
       let formValue = {};
@@ -65,7 +73,11 @@ const FormWidget = ({ title, fields, onSubmit }) => {
   };
   return (
     <Widget title={title}>
-      <form onSubmit={formSubmit} className="FormWidget-form">
+      <form
+        onSubmit={formSubmit}
+        data-testid="form"
+        className="FormWidget-form"
+      >
         {fields.map((field, index) => {
           //index is state id, nanoid is css id
           let elementId = nanoid();
@@ -88,6 +100,7 @@ const FormWidget = ({ title, fields, onSubmit }) => {
                 </div>
                 <input
                   id={elementId}
+                  data-testid={`form-field-${index}`}
                   value={createSelector(index).value}
                   onChange={createUpdator(index)}
                   placeholder={field.placeholder}
@@ -98,7 +111,11 @@ const FormWidget = ({ title, fields, onSubmit }) => {
             </div>
           );
         })}
-        <input type="submit" className="FormWidget-submit" />
+        <input
+          type="submit"
+          data-testid="submit"
+          className="FormWidget-submit"
+        />
       </form>
     </Widget>
   );
@@ -223,17 +240,54 @@ export class FormFieldBuilder {
 }
 
 export const Validators = {
+  /**
+   * checks against pattern
+   * @param {Regex} regex
+   * @returns
+   */
   Pattern: (regex) => {
     if (!regex instanceof RegExp) regex = new RegExp(regex);
     return (input) => {
-      return input.test(regex);
+      return regex.test(input);
     };
   },
+  /**
+   * checks for valid email
+   * @returns
+   */
   Email: (input) => {
     //add email validation
-    return true;
+    return /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/.test(
+      input
+    );
   },
+  /**
+   * Accepts anything not blank
+   * @returns
+   */
   Required: (input) => {
     return !!input;
+  },
+  /**
+   * accepts anything above min
+   * @param {number} min
+   */
+  Min: (min) => {
+    if (!Number.isInteger(min))
+      throw new Error("Invalid parameter, must be integer");
+    return (input) => {
+      return !!input && input.length >= min;
+    };
+  },
+  /**
+   * Accepts anything below max (including empty or undfined)
+   * @param {number} max
+   */
+  Max: (max) => {
+    if (!Number.isInteger(max))
+      throw new Error("Invalid parameter, must be integer");
+    return (input) => {
+      return typeof input === "undefined" || input.length <= max;
+    };
   },
 };
