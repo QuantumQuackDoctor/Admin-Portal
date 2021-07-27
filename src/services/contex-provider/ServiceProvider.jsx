@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 import AuthService from "../AuthService";
 
-export const ServiceContext = createContext();
+const ServiceContext = createContext();
 
 const ServiceProvider = ({ children }) => {
   const services = {

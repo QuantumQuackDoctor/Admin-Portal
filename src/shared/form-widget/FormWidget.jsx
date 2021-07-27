@@ -8,19 +8,21 @@ import "./FormWidget.css";
  * @param {Array} fields
  * @returns
  */
-const FormWidget = ({ title, fields, onSubmit }) => {
+const FormWidget = ({ title, fields, onSubmit, errorMessage }) => {
   //construct state from fields
   let initialState = fields.map((field, index) => {
     return {
       id: index,
       name: field.name,
-      currentValue: "",
+      currentValue: field.inputType === "checkbox" ? false : "",
       validators: field.validators,
       displayError: false,
     };
   });
+  let id = nanoid();
   const [formState, setFormState] = useState(initialState);
-  const createUpdator = (id) => {
+  const createUpdator = (id, inputType) => {
+    if (!inputType) inputType = "text";
     return (e) => {
       setFormState(
         formState.map((field) => {
@@ -31,7 +33,8 @@ const FormWidget = ({ title, fields, onSubmit }) => {
             });
             return {
               ...field,
-              currentValue: e.target.value,
+              currentValue:
+                inputType === "checkbox" ? e.target.checked : e.target.value,
               displayError: hasError,
             };
           }
@@ -68,11 +71,12 @@ const FormWidget = ({ title, fields, onSubmit }) => {
       formState.forEach((field) => {
         formValue[field.name] = field.currentValue;
       });
-      onSubmit(formValue);
+      onSubmit.call(onSubmit, formValue);
     }
   };
   return (
     <Widget title={title}>
+      <span className="FormWidget-error">{errorMessage}</span>
       <form
         onSubmit={formSubmit}
         data-testid="form"
@@ -80,7 +84,7 @@ const FormWidget = ({ title, fields, onSubmit }) => {
       >
         {fields.map((field, index) => {
           //index is state id, nanoid is css id
-          let elementId = nanoid();
+          let elementId = `Form-Widget-${index}${id}`;
           return (
             <div key={index} className="FormWidget-field-container">
               <span
@@ -91,7 +95,7 @@ const FormWidget = ({ title, fields, onSubmit }) => {
                     : "hidden",
                 }}
               >
-                {field.errorMessage}
+                {field.errorMessage || <br />}
               </span>
               <div className="FormWidget-input">
                 <div className="FormWidget-label">
@@ -102,9 +106,9 @@ const FormWidget = ({ title, fields, onSubmit }) => {
                   id={elementId}
                   data-testid={`form-field-${index}`}
                   value={createSelector(index).value}
-                  onChange={createUpdator(index)}
+                  onChange={createUpdator(index, field.inputType)}
                   placeholder={field.placeholder}
-                  type={field.type}
+                  type={field.inputType}
                   name={field.name}
                 />
               </div>
@@ -151,6 +155,16 @@ export class FormBuilder {
 
   setTitle(title) {
     this.title = title;
+    return this;
+  }
+
+  /**
+   * pass in state, to stop showing a message set to empty string
+   * @param {string} message
+   */
+  addErrorMessageState(message) {
+    this.errorMessage = message;
+    return this;
   }
 
   /**
@@ -164,6 +178,7 @@ export class FormBuilder {
         title={this.title}
         fields={this.fields.map((fieldBuilder) => fieldBuilder.build())}
         onSubmit={onSubmit}
+        errorMessage={this.errorMessage}
       />
     );
   }

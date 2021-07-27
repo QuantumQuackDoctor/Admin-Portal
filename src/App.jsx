@@ -1,19 +1,23 @@
-import { BrowserRouter } from "react-router-dom";
-import { WidgetContainer } from "./shared/widget/Widget";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import "./App.css";
-import Header from "./shared/header/Header";
-import LoginForm from "./shared/login-form/LoginForm";
 import ServiceProvider from "./services/contex-provider/ServiceProvider";
+import HomePage from "./pages/home/HomePage";
+import AccountsPage from "./pages/accounts/AcccountsPage";
+import UsersPage from "./pages/users/UsersPage";
+import RestaurantsPage from "./pages/restaurants/RestaurantsPage";
+import DriversPage from "./pages/drivers/DriversPage";
 
 function App() {
   return (
     <BrowserRouter>
       <ServiceProvider>
-        <Header>
-          <WidgetContainer>
-            <LoginForm></LoginForm>
-          </WidgetContainer>
-        </Header>
+        <Switch>
+          <Route exact path={["/", "/home"]} component={HomePage} />
+          <Route path="/users" component={UsersPage} />
+          <Route path="/drivers" component={DriversPage} />
+          <Route path="/restaurants" component={RestaurantsPage} />
+          <Route path="/account" component={AccountsPage} />
+        </Switch>
       </ServiceProvider>
     </BrowserRouter>
   );

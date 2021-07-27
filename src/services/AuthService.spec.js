@@ -1,44 +1,40 @@
 import axios from "axios";
-import { Response, createServer } from "miragejs";
+import MockAdapter from "axios-mock-adapter";
 import AuthService from "./AuthService";
 
-var authService = new AuthService();
+describe("Auth service tests", () => {
+  var authService = new AuthService();
+  var adapter = new MockAdapter(axios);
 
-var server = createServer();
+  adapter.onPost("/accounts/login").reply(200, { jwt: "jwt" });
 
-beforeEach(() => {
-  server.post("/accounts/login", () => {
-    return new Response(200, {}, { jwt: "jwt" });
+  it("can send login", (done) => {
+    authService.login().then((token) => {
+      expect(token).toEqual("jwt");
+      done();
+    });
   });
-  server.get("/unauthorized", () => {
-    return new Response(401);
-  });
-});
 
-it("can send login", (done) => {
-  authService.login().then((token) => {
-    expect(token).toEqual("jwt");
-    done();
+  it("can add authorization header", (done) => {
+    let authorization;
+    adapter.onGet("/accounts/authenticated").reply((config) => {
+      authorization = config.headers.Authorization;
+      return [200];
+    });
+    authService.testAuthentication().then(() => {
+      expect(authorization).toBe("Bearer jwt");
+      done();
+    });
   });
-});
 
-it("can add authorization header", (done) => {
-  let authorization;
-  server.get("/accounts/authenticated", (schema, req) => {
-    authorization = req.requestHeaders.Authorization;
-    return new Response(200);
-  });
-  authService.testAuthentication().then(() => {
-    expect(authorization).toBe("Bearer jwt");
-    done();
-  });
-});
+  adapter.onGet("/unauthorized").reply(401);
 
-it("logout on 401", async () => {
-  expect(authService.isAuthenticated).toBeTruthy();
-  let res = await axios.get("/unauthorized").catch((error) => {
-    return error;
+  it("logout on 401", async () => {
+    expect(authService.isAuthenticated).toBeTruthy();
+    let res = await axios.get("/unauthorized").catch((error) => {
+      return error;
+    });
+    expect(authService.isAuthenticated).toBeFalsy();
+    expect(localStorage.getItem(authService.token)).toBeNull();
   });
-  expect(authService.isAuthenticated).toBeFalsy();
-  expect(localStorage.getItem(authService.token)).toBeNull();
 });
