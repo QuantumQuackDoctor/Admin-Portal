@@ -1,10 +1,69 @@
 # General information
 
+## CSS
+
 Prefix all classnames and ids with component name
 ex.
 
 ```
 .Header-link
+```
+
+## Services
+
+Services will be provided use context, add services in the ServiceProvider and create a custom hook for them
+
+```
+const services = {
+    authentication: new AuthService(),
+};
+```
+
+```
+export const useAuth = () => {
+  return useContext(ServiceContext).authentication;
+};
+
+```
+
+## style
+
+Main pages will display data using widgets, these should redirect to more specific pages if needed.
+
+```
+<WidgetContainer>
+    <Widget title="Title">
+        content goes here
+    </Widget>
+</WidgetContainer>
+```
+
+Widget container handles layout, Widget applies some default styles and adds a close button
+
+## Form Builder
+
+formbuilder is a utility for making fairly customizable form widgets
+general usage
+
+```
+let builder = new FormBuilder("testTitle")
+    .addField("test", "test")
+    .setPlaceholder("placeholder")
+    .setValidators([Validators.Required])
+    .setErrorMessage("required")
+    .and()
+    .addField("2", "2")
+    .setPlaceholder("placeholder2")
+    .setIcon(<FaThemeisle />)
+    .and();
+```
+
+```
+<WidgetContainer>
+    {builder.build((value) => {
+    console.log(value);
+    })}
+</WidgetContainer>
 ```
 
 # How to add the header to a route
@@ -15,6 +74,8 @@ ex.
 </Header>
 Any components specified here will be partially covered by header
 ```
+
+Components outside of header will be covered on the left and bottom
 
 # Getting Started with Create React App
 

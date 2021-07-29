@@ -1,0 +1,53 @@
+.FormWidget-form {
+  display: flex;
+  flex-direction: column;
+}
+.FormWidget-input {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-main);
+}
+
+.FormWidget-field-container {
+  margin-bottom: 1em;
+}
+
+.FormWidget-input > input {
+  border: none;
+  border-left: 2px solid var(--color-main);
+  color: var(--color-main);
+  background-color: transparent;
+  transition: border 0.2s ease-in-out;
+}
+
+.FormWidget-input > input:hover {
+  border-left: 2px solid var(--bg-light);
+}
+
+.FormWidget-input > input:focus {
+  outline: none;
+  border-left: 2px solid var(--bg-light);
+}
+
+.FormWidget-submit {
+  align-self: center;
+  border: none;
+  border-radius: 5px;
+  color: var(--color-light);
+  padding: 0.4em;
+  background-color: var(--bg-light);
+  box-shadow: 2px 1px var(--bg-main);
+}
+
+.FormWidget-submit:active {
+  box-shadow: 0 0 var(--bg-main);
+  color: var(--bg-main);
+}
+
+.FormWidget-error {
+  color: red;
+}
+
+.FormWidget-label > label {
+  margin-left: 0.3em;
+}
