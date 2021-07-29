@@ -12,6 +12,7 @@ export default class AuthService {
 
     if (this.isAuthenticated) {
       this.addInterceptors();
+      this.testAuthentication();
     }
   }
 
@@ -77,7 +78,11 @@ export default class AuthService {
       axios.interceptors.response.eject(this.responseInterceptor);
   }
 
-  async testAuthentication() {
-    let res = await axios.get("/accounts/authenticated");
+  testAuthentication() {
+    return axios.get("/accounts/authenticated");
   }
+}
+
+export function register(body) {
+  return axios.put("/accounts/register", body);
 }
