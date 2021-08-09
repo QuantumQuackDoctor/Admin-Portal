@@ -84,5 +84,9 @@ export default class AuthService {
 }
 
 export function register(body) {
-  return axios.put("/accounts/register", body);
+  return axios.put("/accounts/register?admin=true", body);
+}
+
+export function activate(token) {
+  return axios.post(`/accounts/activate/${token}`, {});
 }

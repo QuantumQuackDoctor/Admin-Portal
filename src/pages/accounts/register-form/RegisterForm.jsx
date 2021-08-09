@@ -83,6 +83,9 @@ const RegisterForm = () => {
           case 400:
             setErrorMessage("*missing field");
             break;
+          case 403:
+            setErrorMessage("*email not valid for admin");
+            break;
           case 409:
             setErrorMessage("*email taken");
             break;
