@@ -25,6 +25,7 @@ export default class AuthService {
       this.sendEvent(true);
       this.removeInterceptors(); //just in case
       this.addInterceptors();
+      return this.token;
     } catch (err) {
       return err.response.status;
     }

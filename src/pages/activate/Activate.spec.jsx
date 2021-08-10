@@ -20,7 +20,7 @@ describe("activate component", () => {
       </MemoryRouter>
     );
     return waitFor(() => {
-      expect(screen.getByText("Activation successful")).toBeInTheDocument();
+      expect(screen.getByText("Account Activated")).toBeInTheDocument();
     });
   });
 });
