@@ -1,6 +1,5 @@
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { FormBuilder, Validators } from "../form-widget/FormWidget";
-import { AuthServiceFactory } from "../../services/AuthService";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../services/contex-provider/ServiceProvider";
 const LoginForm = () => {
@@ -17,8 +16,11 @@ const LoginForm = () => {
     };
   }, [authService, setAuthenticated]);
 
+  const [erorrMessage, setErrorMessage] = useState("");
+
   const builder = new FormBuilder("Login");
   builder
+    .addErrorMessageState(erorrMessage)
     .addField("Email", "email")
     .addValidator(Validators.Email)
     .setErrorMessage("*email not valid")
@@ -32,9 +34,19 @@ const LoginForm = () => {
     .setInputType("password")
     .setPlaceholder("password")
     .setIcon(<FaLock />);
-  const submitFunction = (authRequest) => {
+  const submitFunction = async (authRequest) => {
     authRequest["isDriver"] = false;
-    authService.login(authRequest);
+    let errorCode = await authService.login(authRequest);
+    if (errorCode) {
+      console.log(errorCode);
+      switch (errorCode) {
+        case 401:
+          setErrorMessage("Incorrect email or password");
+          break;
+        default:
+          setErrorMessage("Failed to connect to server");
+      }
+    }
   };
   return <>{authenticated ? "" : builder.build(submitFunction)}</>;
 };

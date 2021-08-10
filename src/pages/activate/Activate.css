@@ -1,0 +1,34 @@
+.Activate-center {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Activate-container {
+  background-color: var(--color-main);
+  color: var(--bg-main);
+  width: 90%;
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.Activate-link {
+  text-decoration: none;
+  color: var(--color-light);
+  transition: color 0.2s ease-in-out;
+}
+
+.Activate-link:hover {
+  color: var(--bg-light);
+}
+
+@media only screen and (min-width: 600px) {
+  .Activate-container {
+    width: 40%;
+    height: 30%;
+  }
+}

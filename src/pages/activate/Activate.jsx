@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { activate } from "../../services/AuthService";
+import "./Activate.css";
 
 const Activate = () => {
   const { token } = useParams();
@@ -41,22 +42,37 @@ const Activate = () => {
 
   if (activationStatus.loading) {
     return (
-      <div>
-        <h1>Loading...</h1>
+      <div className="Activate-center">
+        <div className="Activate-container">
+          <h1>Loading...</h1>
+        </div>
       </div>
     );
   }
   if (activationStatus.error) {
     return (
-      <div>
-        <h1>Acctivation Failed, {activationStatus.errorMessage}</h1>
+      <div className="Activate-center">
+        <div className="Activate-container">
+          <h1>Acctivation Failed, {activationStatus.errorMessage}</h1>
+          <Link to="/account" className="Activate-link">
+            Return to Register/Login
+          </Link>
+        </div>
       </div>
     );
   }
   return (
-    <div>
-      <h1>Activation successful</h1>
-      <Link to="/account">Login</Link>
+    <div className="Activate-center">
+      <div className="Activate-container">
+        <h1>Account Activated</h1>
+        <p>
+          This account has been confirmed. You may click on the link below to
+          log in now.
+        </p>
+        <Link to="/account" className="Activate-link">
+          Log in to Scrumptious
+        </Link>
+      </div>
     </div>
   );
 };

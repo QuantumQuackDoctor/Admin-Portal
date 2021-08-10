@@ -39,7 +39,6 @@ describe("register form test", () => {
 
     return waitFor(() => {
       expect(httpSpy).toHaveBeenCalled();
-      expect(historySpy).toHaveBeenCalledWith("/account");
     });
   });
 });
