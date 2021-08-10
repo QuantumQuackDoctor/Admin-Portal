@@ -79,10 +79,8 @@ export default class AuthService {
   }
 
   removeInterceptors() {
-    if (this.requestInterceptor)
-      axios.interceptors.request.eject(this.requestInterceptor);
-    if (this.responseInterceptor)
-      axios.interceptors.response.eject(this.responseInterceptor);
+    axios.interceptors.request.eject(this.requestInterceptor);
+    axios.interceptors.response.eject(this.responseInterceptor);
   }
 
   testAuthentication() {
