@@ -2,3 +2,12 @@
   display: flex;
   flex-direction: column;
 }
+
+.UserWidget-container p {
+  color: var(--color-light);
+}
+
+.UserWidget-left-right {
+  display: flex;
+  justify-content: space-between;
+}
