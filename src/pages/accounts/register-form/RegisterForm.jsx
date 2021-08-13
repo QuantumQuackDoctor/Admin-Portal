@@ -10,11 +10,9 @@ import {
   Validators,
 } from "../../../shared/form-widget/FormWidget";
 import { register } from "../../../services/AuthService";
-import { useHistory } from "react-router-dom";
 import { useState } from "react";
 
-const RegisterForm = () => {
-  const history = useHistory();
+const RegisterForm = ({ authenticated }) => {
   let builder = new FormBuilder("Register");
   const [errorMessage, setErrorMessage] = useState("");
   builder
@@ -72,25 +70,35 @@ const RegisterForm = () => {
     .setInitialValue("true")
     .and();
 
+  const [registrationFinished, setRegistrationFinished] = useState(false);
+  var canSubmit = true;
+
   const submitFunction = (userFields) => {
-    let userData = changeFormDataToUser(userFields);
-    register(userData).then(
-      (res) => {
-        history.push("/account");
-      },
-      (err) => {
-        switch (err.response.status) {
-          case 400:
-            setErrorMessage("*missing field");
-            break;
-          case 409:
-            setErrorMessage("*email taken");
-            break;
-          default:
-            setErrorMessage("Registration failed");
+    if (canSubmit) {
+      canSubmit = false;
+      let userData = changeFormDataToUser(userFields);
+      register(userData).then(
+        (res) => {
+          setRegistrationFinished(true);
+        },
+        (err) => {
+          canSubmit = true;
+          switch (err.response.status) {
+            case 400:
+              setErrorMessage("*missing field");
+              break;
+            case 403:
+              setErrorMessage("*email not valid for admin");
+              break;
+            case 409:
+              setErrorMessage("*email taken");
+              break;
+            default:
+              setErrorMessage("Registration failed");
+          }
         }
-      }
-    );
+      );
+    }
   };
 
   const changeFormDataToUser = (obj) => {
@@ -112,7 +120,13 @@ const RegisterForm = () => {
     };
   };
 
-  return <>{builder.build(submitFunction)}</>;
+  return (
+    <>
+      {authenticated || registrationFinished
+        ? ""
+        : builder.build(submitFunction)}
+    </>
+  );
 };
 
 export default RegisterForm;

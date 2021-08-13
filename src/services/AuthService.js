@@ -17,14 +17,18 @@ export default class AuthService {
   }
 
   async login(authRequest) {
-    let res = await axios.post("/accounts/login", authRequest);
-    this.token = res.data.jwt;
-    localStorage.setItem(TOKEN, this.token);
-    this.isAuthenticated = true;
-    this.sendEvent(true);
-    this.removeInterceptors(); //just in case
-    this.addInterceptors();
-    return this.token;
+    try {
+      let res = await axios.post("/accounts/login", authRequest);
+      this.token = res.data.jwt;
+      localStorage.setItem(TOKEN, this.token);
+      this.isAuthenticated = true;
+      this.sendEvent(true);
+      this.removeInterceptors(); //just in case
+      this.addInterceptors();
+      return this.token;
+    } catch (err) {
+      return err.response.status;
+    }
   }
 
   sendEvent(authenticationStatus) {
@@ -62,20 +66,21 @@ export default class AuthService {
     });
 
     this.responseInterceptor = axios.interceptors.response.use(
-      () => {},
+      (response) => {
+        return Promise.resolve(response);
+      },
       (error) => {
         if (error.response.status === 401) {
           if (this.isAuthenticated) this.logout();
         }
+        return Promise.reject(error);
       }
     );
   }
 
   removeInterceptors() {
-    if (this.requestInterceptor)
-      axios.interceptors.request.eject(this.requestInterceptor);
-    if (this.responseInterceptor)
-      axios.interceptors.response.eject(this.responseInterceptor);
+    axios.interceptors.request.eject(this.requestInterceptor);
+    axios.interceptors.response.eject(this.responseInterceptor);
   }
 
   testAuthentication() {
@@ -84,5 +89,9 @@ export default class AuthService {
 }
 
 export function register(body) {
-  return axios.put("/accounts/register", body);
+  return axios.put("/accounts/register?admin=true", body);
+}
+
+export function activate(token) {
+  return axios.post(`/accounts/activate/${token}`, {});
 }

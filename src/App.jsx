@@ -6,6 +6,7 @@ import AccountsPage from "./pages/accounts/AcccountsPage";
 import UsersPage from "./pages/users/UsersPage";
 import RestaurantsPage from "./pages/restaurants/RestaurantsPage";
 import DriversPage from "./pages/drivers/DriversPage";
+import Activate from "./pages/activate/Activate";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/drivers" component={DriversPage} />
           <Route path="/restaurants" component={RestaurantsPage} />
           <Route path="/account" component={AccountsPage} />
+          <Route path="/activate/:token" component={Activate} />
         </Switch>
       </ServiceProvider>
     </BrowserRouter>

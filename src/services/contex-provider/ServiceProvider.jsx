@@ -15,6 +15,10 @@ const ServiceProvider = ({ children }) => {
   );
 };
 
+/**
+ *
+ * @returns {AuthService}
+ */
 export const useAuth = () => {
   return useContext(ServiceContext).authentication;
 };

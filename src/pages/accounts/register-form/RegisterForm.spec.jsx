@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import RegisterForm from "./RegisterForm";
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
-import { MemoryRouter, Router } from "react-router-dom";
+import { Router } from "react-router-dom";
 
 describe("register form test", () => {
   it("can create", () => {
@@ -12,7 +12,7 @@ describe("register form test", () => {
   var adapter = new MockAdapter(axios);
 
   it("sends register to server and redirects", () => {
-    adapter.onPut("/accounts/register").reply((req) => {
+    adapter.onPut("/accounts/register?admin=true").reply((req) => {
       return [200];
     });
 
@@ -39,7 +39,6 @@ describe("register form test", () => {
 
     return waitFor(() => {
       expect(httpSpy).toHaveBeenCalled();
-      expect(historySpy).toHaveBeenCalledWith("/account");
     });
   });
 });
