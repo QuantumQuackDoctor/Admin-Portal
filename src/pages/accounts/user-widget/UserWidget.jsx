@@ -1,8 +1,5 @@
 import { useState } from "react";
-import {
-  getCurrentUser,
-  deleteCurrentUser,
-} from "../../../services/UserService";
+import { getCurrentUser } from "../../../services/UserService";
 import { Widget } from "../../../shared/widget/Widget";
 import { useEffect } from "react";
 import { useAuth } from "../../../services/contex-provider/ServiceProvider";
@@ -52,15 +49,6 @@ const UserWidget = ({ authenticated }) => {
                 }}
               >
                 Logout
-              </button>
-              <button
-                className="FormWidget-submit"
-                onClick={() => {
-                  deleteCurrentUser();
-                  authService.logout();
-                }}
-              >
-                Delete
               </button>
             </div>
           </div>

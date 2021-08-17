@@ -305,4 +305,11 @@ export const Validators = {
       return typeof input === "undefined" || input.length <= max;
     };
   },
+  Age: (age) => {
+    return (input) => {
+      let dateDiff = Date.now() - Date.parse(input);
+      let ageDate = new Date(dateDiff);
+      return ageDate.getUTCFullYear() - 1970 >= age;
+    };
+  },
 };
