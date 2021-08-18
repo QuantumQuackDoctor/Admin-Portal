@@ -1,10 +1,4 @@
-import {
-  FaCalendar,
-  FaEnvelope,
-  FaIdCard,
-  FaLock,
-  FaPhone,
-} from "react-icons/fa";
+import { FaCalendar, FaEnvelope, FaIdCard, FaLock } from "react-icons/fa";
 import {
   FormBuilder,
   Validators,
@@ -35,7 +29,8 @@ const RegisterForm = ({ authenticated }) => {
 
     .addField("Birth date", "DOB")
     .addValidator(Validators.Required)
-    .setErrorMessage("*required")
+    .addValidator(Validators.Age(18))
+    .setErrorMessage("*must be over 18")
     .setIcon(<FaCalendar />)
     .setInputType("date")
     .and()
@@ -50,24 +45,6 @@ const RegisterForm = ({ authenticated }) => {
     .addField("Last name", "lastName")
     .setPlaceholder("last name")
     .setIcon(<FaIdCard />)
-    .and()
-
-    .addField("Phone", "phone")
-    .setPlaceholder("###-###-####")
-    .setIcon(<FaPhone />)
-    .and()
-
-    .addField("Are you a veteran?", "veteranStatus")
-    .setInputType("checkbox")
-    .and()
-
-    .addField("recieve email notifications?", "emailNotifications")
-    .setInputType("checkbox")
-    .and()
-
-    .addField("recieve text notifications?", "textNotifications")
-    .setInputType("checkbox")
-    .setInitialValue("true")
     .and();
 
   const [registrationFinished, setRegistrationFinished] = useState(false);
@@ -107,13 +84,13 @@ const RegisterForm = ({ authenticated }) => {
       password: obj.password,
       firstName: obj.firstName,
       lastName: obj.lastName,
-      phone: obj.phone,
+      phone: null,
       DOB: obj.DOB,
-      veteranStatus: obj.veteranStatus,
+      veteranStatus: false,
       settings: {
         notifications: {
-          email: obj.emailNotifications,
-          text: obj.textNotifications,
+          email: false,
+          text: false,
         },
         theme: "dark",
       },
