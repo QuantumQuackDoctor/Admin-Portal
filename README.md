@@ -66,6 +66,51 @@ let builder = new FormBuilder("testTitle")
 </WidgetContainer>
 ```
 
+### Formbuilder rows
+
+```
+let builder = new FormBuilder("testTitle")
+    .setUseRows(true)
+
+    //This field is in row 0
+    .addField("test", "test")
+    .setPlaceholder("placeholder")
+    .setValidators([Validators.Required])
+    .setErrorMessage("required")
+    .and()
+
+    //This field starts row 1
+    .addField("2", "2")
+    .setPlaceholder("placeholder2")
+    .setIcon(<FaThemeisle />)
+    .setDesiredRow(1) //!!this changes the row
+    .and();
+
+    //This field is now part of row 1
+    .addField("2", "2")
+    .setPlaceholder("placeholder2")
+    .setIcon(<FaThemeisle />)
+    .and();
+
+
+    //This field starts row 2
+    .addField("2", "2")
+    .setPlaceholder("placeholder2")
+    .setIcon(<FaThemeisle />)
+    .setDesiredRow(2) //!!this changes the row
+    .and();
+
+    //This field is now part of row 2
+    .addField("2", "2")
+    .setPlaceholder("placeholder2")
+    .setIcon(<FaThemeisle />)
+    .and();
+
+```
+
+Upon setting useRows to true all fields are horizontally aligned (default useRows is false)
+Desired row is applied to all fields following it
+
 # How to add the header to a route
 
 ```
