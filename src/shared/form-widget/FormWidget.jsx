@@ -8,7 +8,7 @@ import "./FormWidget.css";
  * @param {Array} fields
  * @returns
  */
-const FormWidget = ({ title, fields, onSubmit, errorMessage }) => {
+const FormWidget = ({ title, fields, onSubmit, errorMessage, useRows }) => {
   //construct state from fields
   let initialState = fields.map((field, index) => {
     return {
@@ -74,6 +74,21 @@ const FormWidget = ({ title, fields, onSubmit, errorMessage }) => {
       onSubmit.call(onSubmit, formValue);
     }
   };
+
+  let rows = [
+    {
+      desiredRow: 0,
+      fields: [],
+    },
+  ];
+
+  fields.forEach((field, index) => {
+    field.id = index;
+    let row = rows.find((row) => row.desiredRow === field.desiredRow);
+    if (row) row.fields.push(field);
+    else rows.push({ desiredRow: field.desiredRow, fields: [field] });
+  });
+
   return (
     <Widget title={title}>
       <span className="FormWidget-error">{errorMessage}</span>
@@ -82,39 +97,47 @@ const FormWidget = ({ title, fields, onSubmit, errorMessage }) => {
         data-testid="form"
         className="FormWidget-form"
       >
-        {fields.map((field, index) => {
-          //index is state id, nanoid is css id
-          let elementId = `Form-Widget-${index}${id}`;
-          return (
-            <div key={index} className="FormWidget-field-container">
-              <span
-                className="FormWidget-error"
-                style={{
-                  visibility: createSelector(index).displayError
-                    ? "visible"
-                    : "hidden",
-                }}
-              >
-                {field.errorMessage || <br />}
-              </span>
-              <div className="FormWidget-input">
-                <div className="FormWidget-label">
-                  {field.icon}
-                  <label htmlFor={elementId}>{field.label}</label>
-                </div>
-                <input
-                  id={elementId}
-                  data-testid={`form-field-${index}`}
-                  value={createSelector(index).value}
-                  onChange={createUpdator(index, field.inputType)}
-                  placeholder={field.placeholder}
-                  type={field.inputType}
-                  name={field.name}
-                />
+        <div className="FormWidget-row-container">
+          {rows.map((row) => {
+            return (
+              <div className="FormWidget-row" style={{ order: row.desiredRow }}>
+                {row.fields.map((field, index) => {
+                  //index is state id, nanoid is css id
+                  let elementId = `Form-Widget-${index}${id}`;
+                  return (
+                    <div key={field.id} className="FormWidget-field-container">
+                      <div
+                        className="FormWidget-error"
+                        style={{
+                          visibility: createSelector(field.id).displayError
+                            ? "visible"
+                            : "hidden",
+                        }}
+                      >
+                        {field.errorMessage || <br />}
+                      </div>
+                      <div className="FormWidget-input">
+                        <div className="FormWidget-label">
+                          {field.icon}
+                          <label htmlFor={elementId}>{field.label}</label>
+                        </div>
+                        <input
+                          id={elementId}
+                          data-testid={`form-field-${index}`}
+                          value={createSelector(field.id).value}
+                          onChange={createUpdator(field.id, field.inputType)}
+                          placeholder={field.placeholder}
+                          type={field.inputType}
+                          name={field.name}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
         <input
           type="submit"
           data-testid="submit"
@@ -138,6 +161,7 @@ export class FormBuilder {
   constructor(title = "") {
     this.fields = [];
     this.title = title;
+    this.useRows = false;
   }
 
   /**
@@ -159,6 +183,15 @@ export class FormBuilder {
   }
 
   /**
+   *
+   * @param {*} bool you know what a bool is
+   */
+  setUseRows(bool) {
+    this.useRows = bool;
+    return this;
+  }
+
+  /**
    * pass in state, to stop showing a message set to empty string
    * @param {string} message
    */
@@ -173,9 +206,24 @@ export class FormBuilder {
    * @returns FormWidget
    */
   build(onSubmit) {
+    //map field rows
+    if (this.useRows) {
+      console.log("using rows");
+      let startRow = 0;
+      this.fields.forEach((field) => {
+        if (field.getDesiredRow() === 0) field.setDesiredRow(startRow);
+        else startRow = field.getDesiredRow();
+      });
+    } else {
+      console.log("not using rows");
+      for (let i = 0; i < this.fields.length; i++) {
+        this.fields[i].setDesiredRow(i);
+      }
+    }
     return (
       <FormWidget
         title={this.title}
+        useRows={this.useRows}
         fields={this.fields.map((fieldBuilder) => fieldBuilder.build())}
         onSubmit={onSubmit}
         errorMessage={this.errorMessage}
@@ -183,6 +231,12 @@ export class FormBuilder {
     );
   }
 }
+
+/**
+ * 0 0 0
+ * 1 1 1
+ * 2 2 2
+ */
 
 export class FormFieldBuilder {
   constructor(callingObject, label, name) {
@@ -192,6 +246,7 @@ export class FormFieldBuilder {
       icon: null,
       currentValue: "",
       inputType: "text",
+      desiredRow: 0, //default
       placeholder: "",
       validators: [],
       errorMessage: "",
@@ -202,6 +257,15 @@ export class FormFieldBuilder {
 
   build() {
     return this.fieldValues;
+  }
+
+  setDesiredRow(rowNumber) {
+    this.fieldValues.desiredRow = rowNumber;
+    return this;
+  }
+
+  getDesiredRow() {
+    return this.fieldValues.desiredRow;
   }
 
   setIcon(icon) {
