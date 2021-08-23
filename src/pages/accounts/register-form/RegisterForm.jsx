@@ -25,6 +25,7 @@ const RegisterForm = ({ authenticated }) => {
     .setIcon(<FaLock />)
     .setErrorMessage("*password not long enough")
     .setInputType("password")
+    .setDesiredRow(1)
     .and()
 
     .addField("Birth date", "DOB")

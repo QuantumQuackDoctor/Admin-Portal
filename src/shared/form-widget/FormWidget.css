@@ -47,8 +47,21 @@
 
 .FormWidget-error {
   color: red;
+  overflow-wrap: break-word;
 }
 
 .FormWidget-label > label {
   margin-left: 0.3em;
+}
+
+.FormWidget-field-container {
+  flex: 1;
+  margin: 0.5em;
+}
+
+.FormWidget-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
 }
