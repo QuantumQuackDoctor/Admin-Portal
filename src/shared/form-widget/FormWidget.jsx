@@ -8,19 +8,27 @@ import "./FormWidget.css";
  * @param {Array} fields
  * @returns
  */
-const FormWidget = ({ title, fields, onSubmit, errorMessage }) => {
+const FormWidget = ({
+  title,
+  fields,
+  onSubmit,
+  errorMessage,
+  submitText,
+  children,
+}) => {
   //construct state from fields
   let initialState = fields.map((field, index) => {
     return {
       id: index,
       name: field.name,
-      currentValue: field.inputType === "checkbox" ? false : "",
+      currentValue: field.currentValue,
       validators: field.validators,
       displayError: false,
     };
   });
   let id = nanoid();
   const [formState, setFormState] = useState(initialState);
+
   const createUpdator = (id, inputType) => {
     if (!inputType) inputType = "text";
     return (e) => {
@@ -74,6 +82,7 @@ const FormWidget = ({ title, fields, onSubmit, errorMessage }) => {
       onSubmit.call(onSubmit, formValue);
     }
   };
+
   return (
     <Widget title={title}>
       <span className="FormWidget-error">{errorMessage}</span>
@@ -105,7 +114,7 @@ const FormWidget = ({ title, fields, onSubmit, errorMessage }) => {
                 <input
                   id={elementId}
                   data-testid={`form-field-${index}`}
-                  value={createSelector(index).value}
+                  value={createSelector(index).currentValue}
                   onChange={createUpdator(index, field.inputType)}
                   placeholder={field.placeholder}
                   type={field.inputType}
@@ -115,8 +124,10 @@ const FormWidget = ({ title, fields, onSubmit, errorMessage }) => {
             </div>
           );
         })}
+        {[children].flat()}
         <input
           type="submit"
+          value={submitText}
           data-testid="submit"
           className="FormWidget-submit"
         />
@@ -138,6 +149,8 @@ export class FormBuilder {
   constructor(title = "") {
     this.fields = [];
     this.title = title;
+    this.submitText = "Submit";
+    this.childComponent = null;
   }
 
   /**
@@ -167,6 +180,20 @@ export class FormBuilder {
     return this;
   }
 
+  setChildComponent(component) {
+    this.childComponent = component;
+    return this;
+  }
+
+  /**
+   *
+   * @param {string} text
+   */
+  setSubmitText(text) {
+    this.submitText = text;
+    return this;
+  }
+
   /**
    *
    * @param {Function} onSubmit function called on form submit, function input will be name value pairs for all form fields
@@ -179,6 +206,8 @@ export class FormBuilder {
         fields={this.fields.map((fieldBuilder) => fieldBuilder.build())}
         onSubmit={onSubmit}
         errorMessage={this.errorMessage}
+        submitText={this.submitText}
+        children={this.childComponent}
       />
     );
   }

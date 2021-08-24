@@ -38,6 +38,7 @@
   padding: 0.4em;
   background-color: var(--bg-light);
   box-shadow: 2px 1px var(--bg-main);
+  margin-top: 1em;
 }
 
 .FormWidget-submit:active {
