@@ -15,6 +15,7 @@ const FormWidget = ({
   errorMessage,
   submitText,
   children,
+  showReset,
 }) => {
   //construct state from fields
   let initialState = fields.map((field, index) => {
@@ -26,7 +27,6 @@ const FormWidget = ({
       displayError: false,
     };
   });
-  let id = nanoid();
   const [formState, setFormState] = useState(initialState);
 
   const createUpdator = (id, inputType) => {
@@ -97,6 +97,17 @@ const FormWidget = ({
     else rows.push({ desiredRow: field.desiredRow, fields: [field] });
   });
 
+  const resetFields = () => {
+    setFormState(
+      formState.map((fieldState) => ({
+        ...fieldState,
+        displayError: false,
+        currentValue: fields.find((field) => field.id === fieldState.id)
+          .currentValue,
+      }))
+    );
+  };
+
   return (
     <Widget title={title}>
       <span className="FormWidget-error">{errorMessage}</span>
@@ -108,10 +119,14 @@ const FormWidget = ({
         <div className="FormWidget-row-container">
           {rows.map((row) => {
             return (
-              <div className="FormWidget-row" style={{ order: row.desiredRow }}>
+              <div
+                key={row.desiredRow}
+                className="FormWidget-row"
+                style={{ order: row.desiredRow }}
+              >
                 {row.fields.map((field, index) => {
                   //index is state id, nanoid is css id
-                  let elementId = `Form-Widget-${index}${id}`;
+                  let elementId = `Form-Widget-${field.id}`;
                   return (
                     <div key={field.id} className="FormWidget-field-container">
                       <div
@@ -132,7 +147,7 @@ const FormWidget = ({
                         <input
                           id={elementId}
                           data-testid={`form-field-${index}`}
-                          value={createSelector(field.id).value}
+                          value={createSelector(field.id).currentValue}
                           onChange={createUpdator(field.id, field.inputType)}
                           placeholder={field.placeholder}
                           type={field.inputType}
@@ -147,12 +162,24 @@ const FormWidget = ({
           })}
         </div>
         {[children].flat()}
-        <input
-          type="submit"
-          value={submitText}
-          data-testid="submit"
-          className="FormWidget-submit"
-        />
+        <div className="FormWidget-submit-container">
+          <input
+            type="submit"
+            value={submitText}
+            data-testid="submit"
+            className="FormWidget-submit"
+          />
+          {showReset ? (
+            <input
+              type="reset"
+              className="FormWidget-submit FormWidget-reset"
+              data-testid="reset"
+              onClick={resetFields}
+            />
+          ) : (
+            ""
+          )}
+        </div>
       </form>
     </Widget>
   );
@@ -174,6 +201,7 @@ export class FormBuilder {
     this.submitText = "Submit";
     this.childComponent = null;
     this.useRows = false;
+    this.showReset = false;
   }
 
   /**
@@ -191,6 +219,11 @@ export class FormBuilder {
 
   setTitle(title) {
     this.title = title;
+    return this;
+  }
+
+  setShowReset(boolean) {
+    this.showReset = boolean;
     return this;
   }
 
@@ -234,14 +267,12 @@ export class FormBuilder {
   build(onSubmit) {
     //map field rows
     if (this.useRows) {
-      console.log("using rows");
       let startRow = 0;
       this.fields.forEach((field) => {
         if (field.getDesiredRow() === 0) field.setDesiredRow(startRow);
         else startRow = field.getDesiredRow();
       });
     } else {
-      console.log("not using rows");
       for (let i = 0; i < this.fields.length; i++) {
         this.fields[i].setDesiredRow(i);
       }
@@ -255,6 +286,7 @@ export class FormBuilder {
         errorMessage={this.errorMessage}
         submitText={this.submitText}
         children={this.childComponent}
+        showReset={this.showReset}
       />
     );
   }

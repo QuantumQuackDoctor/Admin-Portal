@@ -1,11 +1,10 @@
-import { findDriver } from "../../services/DriverService";
 import Header from "../../shared/header/Header";
-import DriverWidget from "./driver-widget/DriverWidget";
+import CreateDriverWidget from "./driver-widget/CreateDriverWidget";
 
 const DriversPage = () => {
   return (
     <Header>
-      <DriverWidget driver={findDriver()}></DriverWidget>
+      <CreateDriverWidget></CreateDriverWidget>
     </Header>
   );
 };

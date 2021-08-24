@@ -1,5 +1,7 @@
+import axios from "axios";
+
 export const findDriver = () => {
-  //TODO
+  //TODO actual implementation
   return {
     id: 1,
     email: "mockdriver@example.com",
@@ -23,4 +25,8 @@ export const findDriver = () => {
       },
     ],
   };
+};
+
+export const createDriver = (driver) => {
+  return axios.put("/accounts/driver", driver);
 };

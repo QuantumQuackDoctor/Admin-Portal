@@ -33,7 +33,7 @@ describe("register form test", () => {
     let firstName = screen.getByLabelText("First name");
     fireEvent.change(firstName, { target: { value: "name" } });
     let DOB = screen.getByLabelText("Birth date");
-    fireEvent.change(DOB, { target: { value: "2021-07-15" } });
+    fireEvent.change(DOB, { target: { value: "2000-07-15" } });
 
     fireEvent.click(screen.getByTestId("submit"));
 
