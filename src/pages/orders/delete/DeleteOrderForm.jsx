@@ -40,6 +40,8 @@ const DeleteOrderForm = () => {
     const [modalState, setModalState] = useState("close");
     const [editField, setEditField] = useState("");
     const [updateField, setUpdateField] = useState("");
+    const [updateTimeField, setUpdateTimeField] = useState("");
+    const [updateDateField, setUpdateDateField] = useState("");
 
 
     const handleClose = () => setModalState("close");
@@ -48,6 +50,10 @@ const DeleteOrderForm = () => {
     const handleEditModal = (field) => {
         setEditField(field)
         setModalState("edit");
+    }
+    const handleEditTimeModal = (field) => {
+        setEditField(field)
+        setModalState("editTime");
     }
 
     const handleClear = () => {
@@ -59,7 +65,7 @@ const DeleteOrderForm = () => {
                 return request;
             }
             catch (err) {
-                history.push("/orders");
+                // history.push("/orders");
             }
         }
         fetchData().then(res => {
@@ -95,14 +101,24 @@ const DeleteOrderForm = () => {
     const deleteThisOrder = (id) => {
         setModalState("close");
         let copy = cloneDeep(orders);
-        copy.refunded = true;
+        copy.refunded = "true";
+
+        setOrders(copy);
+        localStorage.setItem(id, JSON.stringify(copy));
+
+        updateOrder(JSON.parse(localStorage.getItem(id))).then();
         history.push("/orders");
     };
 
     const updateThisOrder = () => {
         setModalState("close");
-        updateOrder(JSON.parse(localStorage.getItem(id))).then()
+        updateOrder(JSON.parse(localStorage.getItem(id))).then();
     };
+
+    const convertToIso = (time, date) => {
+        console.log(date.toString() + "T" + time.toString() + ":00.000Z");
+        return date.toString() + "T" + time.toString() + ":00.000Z";
+    }
 
     const updateOrderField = (field) => {
         let copy = cloneDeep(orders);
@@ -124,25 +140,25 @@ const DeleteOrderForm = () => {
                 copy.address = updateField;
                 break;
             case "Order Placed Time":
-                copy.orderTime.orderPlaced = updateField;
+                copy.orderTime.orderPlaced = convertToIso(updateTimeField, updateDateField);
                 break;
             case "Restaurant Accept Time":
-                copy.orderTime.restaurantAccept = updateField;
+                copy.orderTime.restaurantAccept = convertToIso(updateTimeField, updateDateField);
                 break;
             case "Restaurant Start Time":
-                copy.orderTime.restaurantStart = updateField;
+                copy.orderTime.restaurantStart = convertToIso(updateTimeField, updateDateField);
                 break;
             case "Restaurant Complete Time":
-                copy.orderTime.restaurantComplete = updateField;
+                copy.orderTime.restaurantComplete = convertToIso(updateTimeField, updateDateField);
                 break;
             case "Driver Accept Time":
-                copy.orderTime.driverAccept = updateField;
+                copy.orderTime.driverAccept = convertToIso(updateTimeField, updateDateField);
                 break;
             case "Delivered Time":
-                copy.orderTime.delivered = updateField;
+                copy.orderTime.delivered = convertToIso(updateTimeField, updateDateField);
                 break;
             case "Delivery Slot":
-                copy.orderTime.deliverySlot = updateField;
+                copy.orderTime.deliverySlot = convertToIso(updateTimeField, updateDateField);
                 break;
             case "Refunded Status":
                 copy.refunded = updateField;
@@ -162,6 +178,16 @@ const DeleteOrderForm = () => {
         setUpdateField("");
     };
 
+    const formatTime = (time) => {
+        if (time == null) {
+            return null;
+        }
+        let parts = time.slice(0, -1).split('T');
+        let dateComponent = parts[0];
+        let timeComponent = parts[1];
+        return timeComponent.toString().substring(0, 5) + " " + dateComponent.toString();
+    }
+
 
     console.log(orders);
 
@@ -180,20 +206,20 @@ const DeleteOrderForm = () => {
             <dt>Address: {orders.address || "null"}
                 <button className="editButton" onClick={() => handleEditModal("Address")}>Edit</button></dt>
             <dt>Order Placed Time: {orders.orderTime.orderPlaced || "null"}
-                <button className="editButton" onClick={() => handleEditModal("Order Placed Time")}>Edit</button></dt>
-            <dt>Restaurant Accept Time: {orders.orderTime.restaurantAccept || "null"}
-                <button className="editButton" onClick={() => handleEditModal("Restaurant Accept Time")}>Edit</button></dt>
-            <dt>Restaurant Start Time: {orders.orderTime.restaurantStart || "null"}
-                <button className="editButton" onClick={() => handleEditModal("Restaurant Start Time")}>Edit</button></dt>
-            <dt>Restaurant Complete Time: {orders.orderTime.restaurantComplete || "null"}
-                <button className="editButton" onClick={() => handleEditModal("Restaurant Complete Time")}>Edit</button></dt>
-            <dt>Driver Accept Time: {orders.orderTime.driverAccept || "null"}
-                <button className="editButton" onClick={() => handleEditModal("Driver Accept Time")}>Edit</button></dt>
-            <dt>Delivered Time: {orders.orderTime.delivered || "null"}
-                <button className="editButton" onClick={() => handleEditModal("Delivered Time")}>Edit</button></dt>
-            <dt>Delivery Slot: {orders.orderTime.deliverySlot || "null"}
-                <button className="editButton" onClick={() => handleEditModal("Delivery Slot")}>Edit</button></dt>
-            <dt>Refunded: {orders.refunded || "null"}
+                <button className="editButton" onClick={() => handleEditTimeModal("Order Placed Time")}>Edit</button></dt>
+            <dt>Restaurant Accept Time: {formatTime(orders.orderTime.restaurantAccept) || "null"}
+                <button className="editButton" onClick={() => handleEditTimeModal("Restaurant Accept Time")}>Edit</button></dt>
+            <dt>Restaurant Start Time: {formatTime(orders.orderTime.restaurantStart) || "null"}
+                <button className="editButton" onClick={() => handleEditTimeModal("Restaurant Start Time")}>Edit</button></dt>
+            <dt>Restaurant Complete Time: {formatTime(orders.orderTime.restaurantComplete) || "null"}
+                <button className="editButton" onClick={() => handleEditTimeModal("Restaurant Complete Time")}>Edit</button></dt>
+            <dt>Driver Accept Time: {formatTime(orders.orderTime.driverAccept) || "null"}
+                <button className="editButton" onClick={() => handleEditTimeModal("Driver Accept Time")}>Edit</button></dt>
+            <dt>Delivered Time: {formatTime(orders.orderTime.delivered) || "null"}
+                <button className="editButton" onClick={() => handleEditTimeModal("Delivered Time")}>Edit</button></dt>
+            <dt>Delivery Slot: {formatTime(orders.orderTime.deliverySlot) || "null"}
+                <button className="editButton" onClick={() => handleEditTimeModal("Delivery Slot")}>Edit</button></dt>
+            <dt>Refunded: {orders.refunded || "false"}
                 <button className="editButton" onClick={() => handleEditModal("Refunded Status")}>Edit</button></dt>
             <dt>Food Price: {orders.price.food || "null"}
                 <button className="editButton" onClick={() => handleEditModal("Food Price")}>Edit</button></dt>
@@ -241,6 +267,22 @@ const DeleteOrderForm = () => {
 
                 <Form>
                     <Form.Control type="text" placeholder="Enter new value" value={updateField} onChange={e => setUpdateField(e.target.value)} />
+                    <Button variant="primary" onClick={() => updateOrderField(editField)}>
+                        Submit
+                    </Button>
+                </Form></Modal.Body>
+        </Modal>
+        <Modal animation={false} show={modalState === "editTime"} onHide={handleClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>Edit {editField}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>This will not update the order until the update button is pressed
+
+                <Form>
+                    <div>Enter Time in format "HH:MM"</div>
+                    <Form.Control type="text" placeholder="Enter new Time" value={updateTimeField} onChange={e => setUpdateTimeField(e.target.value)} />
+                    <div>Enter Date in format "YYYY-MM-DD"</div>
+                    <Form.Control type="text" placeholder="Enter new Date" value={updateDateField} onChange={e => setUpdateDateField(e.target.value)} />
                     <Button variant="primary" onClick={() => updateOrderField(editField)}>
                         Submit
                     </Button>

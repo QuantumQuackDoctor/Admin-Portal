@@ -23,9 +23,7 @@ const FindOrderForm = () => {
         if (order != "") {
             getOrder(order).then(res => {
                 if (order === res.data.id) {
-                    if (res.data.refunded === true) {
-                        history.push("/orders/" + order);
-                    }
+                    history.push("/orders/" + order);
                 }
             }).catch(err => {
                 setErrorMessage("*Invalid Id " + err);
