@@ -62,11 +62,14 @@ export default class AuthService {
     });
 
     this.responseInterceptor = axios.interceptors.response.use(
-      () => {},
+      (response) => {
+        return Promise.resolve(response);
+      },
       (error) => {
         if (error.response.status === 401) {
           if (this.isAuthenticated) this.logout();
         }
+        return Promise.reject(error);
       }
     );
   }
