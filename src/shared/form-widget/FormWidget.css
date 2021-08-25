@@ -15,6 +15,7 @@
   color: var(--color-main);
   background-color: transparent;
   transition: border 0.2s ease-in-out;
+  padding-left: 0.5em;
 }
 
 .FormWidget-input > input[type="checkbox"] {
@@ -30,6 +31,11 @@
   border-left: 2px solid var(--bg-light);
 }
 
+.FormWidget-submit-container {
+  display: flex;
+  justify-content: center;
+}
+
 .FormWidget-submit {
   align-self: center;
   border: none;
@@ -38,11 +44,17 @@
   padding: 0.4em;
   background-color: var(--bg-light);
   box-shadow: 2px 1px var(--bg-main);
+  margin-top: 1em;
 }
 
 .FormWidget-submit:active {
   box-shadow: 0 0 var(--bg-main);
   color: var(--bg-main);
+}
+
+.FormWidget-reset {
+  margin-left: auto;
+  background-color: red;
 }
 
 .FormWidget-error {

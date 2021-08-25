@@ -1,30 +1,21 @@
+import CreateDriverWidget from "./CreateDriverWidget";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import RegisterForm from "./RegisterForm";
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
-import { Router } from "react-router-dom";
 
-describe("register form test", () => {
+describe("create driver test", () => {
   it("can create", () => {
-    render(<RegisterForm />);
+    render(<CreateDriverWidget />);
   });
 
   var adapter = new MockAdapter(axios);
 
-  it("sends register to server and redirects", () => {
-    adapter.onPut("/accounts/register?admin=true").reply((req) => {
-      return [200];
-    });
+  it("sends create to server", () => {
+    adapter.onPut("/accounts/driver").reply(200, { id: 1 });
 
     const httpSpy = jest.spyOn(axios, "put");
-    const historySpy = jest.fn();
-    const history = { push: historySpy, location: {}, listen: jest.fn() };
 
-    render(
-      <Router history={history}>
-        <RegisterForm />
-      </Router>
-    );
+    render(<CreateDriverWidget />);
 
     let email = screen.getByLabelText("Email");
     fireEvent.change(email, { target: { value: "email@example.com" } });
@@ -32,8 +23,14 @@ describe("register form test", () => {
     fireEvent.change(password, { target: { value: "password" } });
     let firstName = screen.getByLabelText("First name");
     fireEvent.change(firstName, { target: { value: "name" } });
+    let lastName = screen.getByLabelText("Last name");
+    fireEvent.change(lastName, { target: { value: "name" } });
     let DOB = screen.getByLabelText("Birth date");
     fireEvent.change(DOB, { target: { value: "2000-07-15" } });
+    let phone = screen.getByLabelText("Phone");
+    fireEvent.change(phone, { target: { value: "555-555-5555" } });
+    let car = screen.getByLabelText("Car");
+    fireEvent.change(car, { target: { value: "honda civic" } });
 
     fireEvent.click(screen.getByTestId("submit"));
 
