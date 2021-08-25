@@ -8,6 +8,7 @@ import {
   FaHome,
   FaUserEdit,
   FaCar,
+  FaReceipt,
 } from "react-icons/fa";
 import { useEffect, useState } from "react";
 
@@ -15,6 +16,7 @@ import { useEffect, useState } from "react";
 const paths = [
   { name: "Home", icon: <FaHome />, path: "/home" },
   { name: "Users", icon: <FaUser />, path: "/users" },
+  { name: "Orders", icon: <FaReceipt />, path: "/orders" },
   { name: "Drivers", icon: <FaCar />, path: "/drivers" },
   { name: "Restaurants", icon: <FaHamburger />, path: "/restaurants" },
   { name: "Account", icon: <FaUserEdit />, path: "/account" },
