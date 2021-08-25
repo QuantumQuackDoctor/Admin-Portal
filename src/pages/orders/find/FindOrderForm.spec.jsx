@@ -23,8 +23,17 @@ describe("find order test", () => {
 
         render(
             <Router history={history}>
-                <RegisterForm />
+                <FindOrderForm />
             </Router>
         );
+
+        let id = screen.getByLabelText("Id");
+        fireEvent.change(id, { target: { value: 1 } });
+
+        fireEvent.click(screen.getByTestId("submit"));
+
+        return waitFor(() => {
+            expect(httpSpy).toHaveBeenCalled();
+        })
     });
 })

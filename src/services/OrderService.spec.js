@@ -11,6 +11,4 @@ describe("Order service tests", () => {
   it("find an order", (done) => {
     done();
   });
-
-
 });
