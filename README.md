@@ -42,6 +42,12 @@ Widget container handles layout, Widget applies some default styles and adds a c
 
 ## Form Builder
 
+# New Features
+
+the onsubmit function can now recieve two parameters, the first parameter is the same as it has been. the second parameter is a reference to a function that will reset the form, calling the second parameter does just that.
+
+# General Usage I guess
+
 formbuilder is a utility for making fairly customizable form widgets
 general usage
 

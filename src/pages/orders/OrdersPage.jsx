@@ -1,19 +1,31 @@
 import Header from "../../shared/header/Header";
-import {WidgetContainer} from "../../shared/widget/Widget";
+import { WidgetContainer } from "../../shared/widget/Widget";
 import FindOrderForm from "../orders/find/FindOrderForm";
-import UpdateOrderForm from "../orders/update/UpdateOrderForm";
 import DeleteOrderForm from "../orders/delete/DeleteOrderForm";
-import { Route } from "react-router";
+import "./UpdateOrderForm.css";
+import { useStickyState } from "../../util/stickyHook";
 
 const OrdersPage = () => {
-    return (
-        <Header>
-            <WidgetContainer>
-                <Route exact path="/orders" component={FindOrderForm} />
-                <Route path="/orders/:id" component={DeleteOrderForm} />
-            </WidgetContainer>
-        </Header>
-    );
+  const [openOrders, setOpenOrders] = useStickyState([], "openOrders");
+  const openNewOrder = (id) => {
+    if (openOrders.find((val) => val === id)) return;
+    setOpenOrders([...openOrders, id]);
+  };
+
+  const closeOrder = (id) => {
+    setOpenOrders(openOrders.filter((val) => val !== id));
+  };
+
+  return (
+    <Header>
+      <WidgetContainer>
+        {openOrders.map((id) => (
+          <DeleteOrderForm key={id} id={id} close={() => closeOrder(id)} />
+        ))}
+        <FindOrderForm openOrder={openNewOrder} />
+      </WidgetContainer>
+    </Header>
+  );
 };
 
 export default OrdersPage;
