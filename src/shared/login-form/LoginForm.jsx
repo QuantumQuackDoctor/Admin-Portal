@@ -38,7 +38,6 @@ const LoginForm = () => {
     authRequest["isDriver"] = false;
     let errorCode = await authService.login(authRequest);
     if (errorCode) {
-      console.log(errorCode);
       switch (errorCode) {
         case 401:
           setErrorMessage("Incorrect email or password");

@@ -17,7 +17,7 @@ function App() {
           <Route exact path={["/", "/home"]} component={HomePage} />
           <Route path="/users" component={UsersPage} />
           <Route path="/orders" component={OrdersPage} />
-          <Route path="/drivers" component={DriversPage} />
+          <Route path="/drivers/:id?" component={DriversPage} />
           <Route path="/restaurants" component={RestaurantsPage} />
           <Route path="/account" component={AccountsPage} />
           <Route path="/activate/:token" component={Activate} />

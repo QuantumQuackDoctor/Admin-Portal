@@ -79,7 +79,8 @@ const FormWidget = ({
       formState.forEach((field) => {
         formValue[field.name] = field.currentValue;
       });
-      onSubmit.call(onSubmit, formValue);
+      // onSubmit.call(onSubmit, formValue);
+      onSubmit(formValue, resetFields);
     }
   };
 
@@ -108,6 +109,8 @@ const FormWidget = ({
     );
   };
 
+  const formId = nanoid();
+
   return (
     <Widget title={title}>
       <span className="FormWidget-error">{errorMessage}</span>
@@ -126,7 +129,7 @@ const FormWidget = ({
               >
                 {row.fields.map((field, index) => {
                   //index is state id, nanoid is css id
-                  let elementId = `Form-Widget-${field.id}`;
+                  let elementId = `Form-Widget-${formId}-${field.id}`;
                   return (
                     <div key={field.id} className="FormWidget-field-container">
                       <div
