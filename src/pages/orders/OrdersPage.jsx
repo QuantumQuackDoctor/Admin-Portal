@@ -2,11 +2,11 @@ import Header from "../../shared/header/Header";
 import { WidgetContainer } from "../../shared/widget/Widget";
 import FindOrderForm from "../orders/find/FindOrderForm";
 import DeleteOrderForm from "../orders/delete/DeleteOrderForm";
-import { useState } from "react";
 import "./UpdateOrderForm.css";
+import { useStickyState } from "../../util/stickyHook";
 
 const OrdersPage = () => {
-  const [openOrders, setOpenOrders] = useState([]);
+  const [openOrders, setOpenOrders] = useStickyState([], "openOrders");
   const openNewOrder = (id) => {
     if (openOrders.find((val) => val === id)) return;
     setOpenOrders([...openOrders, id]);
