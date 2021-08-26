@@ -1,0 +1,46 @@
+.Orders-list {
+  padding: 0;
+  display: grid;
+  grid-template-columns: auto;
+}
+
+.Orders-list li {
+  list-style-type: none;
+  font-size: 1em;
+  color: var(--color-main);
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.Orders-button {
+  align-self: center;
+  border: none;
+  border-radius: 5px;
+  min-width: 20px;
+  max-height: 30px;
+  color: var(--color-light);
+  padding: 0.4em;
+  background-color: var(--bg-light);
+  box-shadow: 2px 1px var(--bg-main);
+}
+
+.Orders-editButton {
+  min-width: 50px;
+}
+
+.Orders-updateButton {
+  min-width: 50px;
+}
+
+.Orders-action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+@media only screen and (min-width: 1000px) {
+  .Orders-list {
+    grid-template-columns: auto auto;
+  }
+}
