@@ -1,10 +1,11 @@
 import { useHistory } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getOrder, updateOrder } from "../../../services/OrderService";
 import { Widget } from "../../../shared/widget/Widget";
 import { Button, Form, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import cloneDeep from "lodash/cloneDeep";
+import { useSingletonCall } from "../../../util/SingletonHook";
 
 const DeleteOrderForm = ({ id, close }) => {
   const history = useHistory();
@@ -66,7 +67,7 @@ const DeleteOrderForm = ({ id, close }) => {
     });
   };
 
-  useEffect(() => {
+  useSingletonCall(() => {
     async function fetchData() {
       try {
         const request = await getOrder(id);
@@ -86,7 +87,7 @@ const DeleteOrderForm = ({ id, close }) => {
       console.log(JSON.parse(localStorage.getItem(id)));
       setOrders(JSON.parse(localStorage.getItem(id)));
     }
-  }, [id, close]);
+  });
 
   const deleteThisOrder = (id) => {
     setModalState("close");
@@ -373,7 +374,7 @@ const DeleteOrderForm = ({ id, close }) => {
         </button>
         <button
           onClick={() => {
-            history.push(`drivers/${orders.id}`);
+            history.push(`drivers/${orders.driverId}`);
           }}
           className="Orders-button"
         >

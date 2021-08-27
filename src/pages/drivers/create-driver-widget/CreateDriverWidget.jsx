@@ -13,7 +13,7 @@ import {
   Validators,
 } from "../../../shared/form-widget/FormWidget";
 
-const CreateDriverWidget = () => {
+const CreateDriverWidget = ({ openDriver }) => {
   let builder = new FormBuilder("Create Driver");
 
   builder
@@ -93,12 +93,11 @@ const CreateDriverWidget = () => {
   const [errorMessage, setErrorMessage] = useState("");
   builder.addErrorMessageState(errorMessage);
 
-  const submitFn = async (input) => {
+  const submitFn = async (input, reset) => {
     try {
       let res = await createDriver(reformatFormOutput(input));
-      setErrorMessage(
-        "driver created, TODO open driver info. id: " + res.data.id
-      );
+      openDriver(res.data.id);
+      reset();
     } catch (e) {
       switch (e.response.status) {
         case 409:

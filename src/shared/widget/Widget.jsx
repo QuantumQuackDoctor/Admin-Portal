@@ -47,5 +47,9 @@ export const Widget = ({ children, title, rows, columns }) => {
  * @returns
  */
 export const WidgetContainer = ({ children }) => {
-  return <Masonry enableResizableChildren={true}>{[children].flat()}</Masonry>;
+  return (
+    <Masonry enableResizableChildren={true} options={{ columnWidth: 1 }}>
+      {[children].flat()}
+    </Masonry>
+  );
 };
