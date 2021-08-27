@@ -6,7 +6,7 @@ import {
   Validators,
 } from "../../../shared/form-widget/FormWidget";
 import { FaLock, FaIdCard, FaCar, FaCalendar, FaPhone } from "react-icons/fa";
-import { useEffect } from "react";
+import { useSingletonCall } from "../../../util/SingletonHook";
 
 const EditDriverWidget = ({ id, close }) => {
   const [driver, setDriver] = useState({});
@@ -21,7 +21,7 @@ const EditDriverWidget = ({ id, close }) => {
       });
   };
 
-  useEffect(() => {
+  useSingletonCall(() => {
     updateInfo();
   });
 

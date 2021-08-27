@@ -99,6 +99,7 @@ const CreateDriverWidget = ({ openDriver }) => {
       openDriver(res.data.id);
       reset();
     } catch (e) {
+      console.log(e);
       switch (e.response.status) {
         case 409:
           setErrorMessage("*email taken");
