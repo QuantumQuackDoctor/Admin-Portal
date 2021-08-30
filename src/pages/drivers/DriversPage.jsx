@@ -28,6 +28,7 @@ const DriversPage = () => {
   return (
     <Header>
       <WidgetContainer>
+        <CreateDriverWidget openDriver={openNewDriver} />
         {openDrivers.map((id) => (
           <EditDriverWidget
             key={`EditDriver-${id}`}
@@ -37,7 +38,6 @@ const DriversPage = () => {
             }}
           />
         ))}
-        <CreateDriverWidget openDriver={openNewDriver} />
       </WidgetContainer>
     </Header>
   );
