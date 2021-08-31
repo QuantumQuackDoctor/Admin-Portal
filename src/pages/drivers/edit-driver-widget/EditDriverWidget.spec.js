@@ -1,10 +1,4 @@
-import {
-  render,
-  waitFor,
-  screen,
-  fireEvent,
-  act,
-} from "@testing-library/react";
+import { render, waitFor, screen, fireEvent } from "@testing-library/react";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import EditDriverWidget from "./EditDriverWidget";
