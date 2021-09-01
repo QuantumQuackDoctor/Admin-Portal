@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaEnvelope } from "react-icons/fa";
-import { getDriver } from "../../../services/DriverService";
+import { getDriver, updateDriver } from "../../../services/DriverService";
 import {
   FormBuilder,
   Validators,
@@ -103,8 +103,29 @@ const EditDriverWidget = ({ id, close }) => {
     .setInitialValue(driver.phone)
     .setIcon(<FaPhone />)
     .and();
+
   const submitFunction = (data, reset) => {
-    setErrorMessage("false");
+    let updatePassword = data.password.length > 0;
+    let tempDriver = {
+      ...driver,
+      ...data,
+      password: updatePassword ? data.password : "11111111",
+    };
+    updateDriver(tempDriver, updatePassword)
+      .then(async () => {
+        await updateInfo();
+        setErrorMessage("");
+        reset();
+      })
+      .catch((err) => {
+        switch (err.response.status) {
+          case 404:
+            setErrorMessage("driver not found");
+            break;
+          default:
+            setErrorMessage("server error");
+        }
+      });
   };
 
   return (

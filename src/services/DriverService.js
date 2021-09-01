@@ -7,3 +7,9 @@ export const getDriver = (id) => {
 export const createDriver = (driver) => {
   return axios.put("/accounts/driver", driver);
 };
+
+export const updateDriver = (driver, updatePassword) => {
+  return axios.post("/accounts/driver", driver, {
+    params: { "update-password": updatePassword },
+  });
+};
