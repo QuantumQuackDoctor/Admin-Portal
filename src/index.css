@@ -23,3 +23,13 @@ code {
   --color-main: #a2dbfa;
   --color-light: #e8f0f2;
 }
+
+.button {
+  border: none;
+  border-radius: 5px;
+  color: var(--color-light);
+  padding: 0.4em;
+  background-color: var(--bg-light);
+  box-shadow: 2px 1px var(--bg-main);
+  transition: box-shadow 0.2s, color 0.2s;
+}

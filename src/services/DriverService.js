@@ -13,3 +13,7 @@ export const updateDriver = (driver, updatePassword) => {
     params: { "update-password": updatePassword },
   });
 };
+
+export const deleteDriver = (id) => {
+  return axios.delete(`/accounts/driver/${id}`);
+};

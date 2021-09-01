@@ -6,7 +6,7 @@
   position: fixed;
   height: 60px;
   background-color: var(--color-main);
-  transition: all 0.5s ease-in-out;
+  transition: color 0.5s ease-in-out;
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
@@ -23,7 +23,7 @@
   height: 100vh;
   background-color: var(--bg-light);
   top: 0;
-  transition: all 0.5s ease-in-out;
+  transition: left 0.5s ease-in-out;
   display: flex;
   flex-direction: column;
   justify-content: center;

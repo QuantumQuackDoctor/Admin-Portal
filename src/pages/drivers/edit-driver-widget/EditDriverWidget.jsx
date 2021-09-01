@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { FaEnvelope } from "react-icons/fa";
-import { getDriver, updateDriver } from "../../../services/DriverService";
+import {
+  deleteDriver,
+  getDriver,
+  updateDriver,
+} from "../../../services/DriverService";
 import {
   FormBuilder,
   Validators,
 } from "../../../shared/form-widget/FormWidget";
 import { FaLock, FaIdCard, FaCar, FaCalendar, FaPhone } from "react-icons/fa";
 import { useSingletonCall } from "../../../util/SingletonHook";
+import "./EditDriverWidget.css";
 
 const EditDriverWidget = ({ id, close }) => {
   const [driver, setDriver] = useState({});
@@ -26,6 +31,22 @@ const EditDriverWidget = ({ id, close }) => {
   });
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [deleteClicked, setDeleteClicked] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false);
+
+  const handleDeleteClicked = () => {
+    if (!deleteClicked) {
+      setFadeOut(true);
+      setTimeout(() => {
+        setFadeOut(false);
+        setDeleteClicked(true);
+      }, 200);
+    } else {
+      deleteDriver(id).then(() => {
+        close();
+      });
+    }
+  };
 
   const builder = new FormBuilder(`Driver: ${driver.firstName}`);
 
@@ -43,6 +64,20 @@ const EditDriverWidget = ({ id, close }) => {
         >
           Close
         </button>
+        <button
+          className="FormWidget-submit"
+          style={{ width: "100%", backgroundColor: "red" }}
+          onClick={handleDeleteClicked}
+          data-testid="delete-button"
+        >
+          <span
+            className={
+              fadeOut ? "EditDriverWidget-fadeout" : "EditDriverWidget-fadein"
+            }
+          >
+            {deleteClicked ? "Confirm Delete" : "Delete"}
+          </span>
+        </button>
       </div>
     )
 
@@ -59,7 +94,6 @@ const EditDriverWidget = ({ id, close }) => {
     })
     .setIcon(<FaLock />)
     .setErrorMessage("*password not long enough")
-    .setInputType("password")
     .and()
 
     .addField("First name", "firstName")

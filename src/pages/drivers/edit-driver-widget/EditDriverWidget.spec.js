@@ -98,4 +98,42 @@ describe("EditDriverWidget test", () => {
     expect(data.password).toEqual("newPassword");
     expect(request.params["update-password"]).toEqual(true);
   });
+
+  it("deletes driver", async () => {
+    var httpSpy = false;
+    adapter.onDelete("/accounts/driver/1").reply((req) => {
+      httpSpy = true;
+      return [200];
+    });
+    render(<EditDriverWidget id={1} close={() => {}} />);
+    await screen.findByDisplayValue("email@example.com"); //form data is loaded
+
+    let deleteButton = await screen.findByTestId("delete-button");
+    fireEvent.click(deleteButton);
+    await screen.findByText("Confirm Delete");
+    fireEvent.click(deleteButton);
+    await waitFor(() => expect(httpSpy).toBe(true));
+  });
+
+  it("delete requires double click", async () => {
+    var httpSpy = jest.spyOn(axios, "delete");
+    render(<EditDriverWidget id={1} close={() => {}} />);
+    await screen.findByDisplayValue("email@example.com"); //form data is loaded
+
+    let deleteButton = await screen.findByTestId("delete-button");
+    fireEvent.click(deleteButton);
+    await waitFor(() => expect(httpSpy).toHaveBeenCalledTimes(0));
+  });
+
+  it("delete requires spaced double click", async () => {
+    var httpSpy = jest.spyOn(axios, "delete");
+    render(<EditDriverWidget id={1} close={() => {}} />);
+    await screen.findByDisplayValue("email@example.com"); //form data is loaded
+
+    let deleteButton = await screen.findByTestId("delete-button");
+    fireEvent.click(deleteButton);
+    fireEvent.click(deleteButton);
+
+    await waitFor(() => expect(httpSpy).toBeCalledTimes(0));
+  });
 });
