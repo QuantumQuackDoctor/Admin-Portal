@@ -22,12 +22,23 @@ const FormWidget = ({
     return {
       id: index,
       name: field.name,
-      currentValue: field.currentValue,
+      currentValue: field.initValue || "",
       validators: field.validators,
       displayError: false,
     };
   });
   const [formState, setFormState] = useState(initialState);
+
+  const resetFields = () => {
+    setFormState(
+      formState.map((fieldState) => ({
+        ...fieldState,
+        displayError: false,
+        currentValue: fields.find((field) => field.id === fieldState.id)
+          .initValue,
+      }))
+    );
+  };
 
   const createUpdator = (id, inputType) => {
     if (!inputType) inputType = "text";
@@ -51,6 +62,7 @@ const FormWidget = ({
       );
     };
   };
+
   const createSelector = (id) => {
     return formState.find((field) => field.id === id);
   };
@@ -97,17 +109,6 @@ const FormWidget = ({
     if (row) row.fields.push(field);
     else rows.push({ desiredRow: field.desiredRow, fields: [field] });
   });
-
-  const resetFields = () => {
-    setFormState(
-      formState.map((fieldState) => ({
-        ...fieldState,
-        displayError: false,
-        currentValue: fields.find((field) => field.id === fieldState.id)
-          .currentValue,
-      }))
-    );
-  };
 
   const formId = nanoid();
 
@@ -164,7 +165,6 @@ const FormWidget = ({
             );
           })}
         </div>
-        {[children].flat()}
         <div className="FormWidget-submit-container">
           <input
             type="submit"
@@ -184,6 +184,7 @@ const FormWidget = ({
           )}
         </div>
       </form>
+      {[children].flat()}
     </Widget>
   );
 };
@@ -295,19 +296,13 @@ export class FormBuilder {
   }
 }
 
-/**
- * 0 0 0
- * 1 1 1
- * 2 2 2
- */
-
 export class FormFieldBuilder {
   constructor(callingObject, label, name) {
     this.fieldValues = {
       label,
       name,
       icon: null,
-      currentValue: "",
+      initValue: "",
       inputType: "text",
       desiredRow: 0, //default
       placeholder: "",
@@ -336,8 +331,8 @@ export class FormFieldBuilder {
     return this;
   }
 
-  setInitialValue(initialValue) {
-    this.fieldValues.currentValue = initialValue;
+  setInitialValue(val) {
+    this.fieldValues.initValue = val;
     return this;
   }
 
