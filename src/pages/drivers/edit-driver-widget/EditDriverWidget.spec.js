@@ -16,7 +16,7 @@ describe("EditDriverWidget test", () => {
       DOB: "2000-07-20",
       password: "",
       phone: "5555555555",
-      car: "big ass car",
+      car: "very large car",
     });
   });
 
@@ -79,7 +79,7 @@ describe("EditDriverWidget test", () => {
           DOB: "2000-07-20",
           password: "",
           phone: "5555555555",
-          car: "big ass car",
+          car: "very large car",
         },
       ];
     });
