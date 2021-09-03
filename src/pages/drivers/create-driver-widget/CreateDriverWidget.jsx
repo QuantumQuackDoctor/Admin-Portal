@@ -31,7 +31,6 @@ const CreateDriverWidget = ({ openDriver }) => {
     .addValidator(Validators.Min(8))
     .setIcon(<FaLock />)
     .setErrorMessage("*password not long enough")
-    .setInputType("password")
     .and()
 
     .addField("First name", "firstName")
@@ -97,9 +96,9 @@ const CreateDriverWidget = ({ openDriver }) => {
     try {
       let res = await createDriver(reformatFormOutput(input));
       openDriver(res.data.id);
+      setErrorMessage("");
       reset();
     } catch (e) {
-      console.log(e);
       switch (e.response.status) {
         case 409:
           setErrorMessage("*email taken");
