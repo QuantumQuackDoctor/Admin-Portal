@@ -1,4 +1,5 @@
 import axios from "axios";
+import environment from "../environment";
 
 const TOKEN = "token";
 
@@ -18,7 +19,10 @@ export default class AuthService {
 
   async login(authRequest) {
     try {
-      let res = await axios.post("/accounts/login", authRequest);
+      let res = await axios.post(
+        environment.basePath + "/accounts/login",
+        authRequest
+      );
       this.token = res.data.jwt;
       localStorage.setItem(TOKEN, this.token);
       this.isAuthenticated = true;
@@ -84,14 +88,17 @@ export default class AuthService {
   }
 
   testAuthentication() {
-    return axios.get("/accounts/authenticated");
+    return axios.get(environment.basePath + "/accounts/authenticated");
   }
 }
 
 export function register(body) {
-  return axios.put("/accounts/register?admin=true", body);
+  return axios.put(
+    environment.basePath + "/accounts/register?admin=true",
+    body
+  );
 }
 
 export function activate(token) {
-  return axios.post(`/accounts/activate/${token}`, {});
+  return axios.post(environment.basePath + `/accounts/activate/${token}`, {});
 }
