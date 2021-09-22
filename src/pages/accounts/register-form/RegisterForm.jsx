@@ -87,7 +87,7 @@ const RegisterForm = ({ authenticated }) => {
       lastName: obj.lastName,
       phone: null,
       DOB: obj.DOB,
-      veteranStatus: false,
+      isVeteran: false,
       settings: {
         notifications: {
           email: false,
