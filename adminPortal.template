@@ -6,8 +6,6 @@ Parameters:
     Type: String
   BaseStackName:
     Type: String
-  CertificateArn:
-    Type: String
 Resources:
   CloudfrontDistribution:
     Type: AWS::CloudFront::Distribution
@@ -44,8 +42,8 @@ Resources:
         Enabled: true
         HttpVersion: http2
         ViewerCertificate:
-          AcmCertificateArn: !Ref CertificateArn
-          CloudFrontDefaultCertificate: false
+          AcmCertificateArn:
+            Fn::ImportValue: !Sub "${BaseStackName}-CertificateARN"
           MinimumProtocolVersion: TLSv1.2_2018
           SslSupportMethod: "sni-only"
       Tags:
