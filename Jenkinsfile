@@ -4,6 +4,7 @@ pipeline {
         string(name: 'RouteName', description: 'name for cloudfront distribution alias', defaultValue: params.RouteName ?: 'admin')
         string(name: 'BaseStackName', description: 'name of base infrastructure stack', defaultValue: params.BaseStackName ?: 'BaseInfrastructure')
         string(name: 'BucketName', description: 'name of bucket to upload to', defaultValue: params.BucketName ?: '')
+        string(name: 'CertificateArn', description: 'arn of certificate to use', defaultValue: params.BucketName ?: '')
     }
     tools {
         nodejs "Node 14"
@@ -32,7 +33,7 @@ pipeline {
         }
         stage('Create Distribution'){
             steps {
-                sh "aws cloudformation deploy --stack-name AdminPortalStack --region ${AWS_REGION} --template-file adminPortal.template --parameter-overrides RouteName=${params.RouteName} BaseStackName=${params.BaseStackName} --capabilities CAPABILITY_NAMED_IAM"
+                sh "aws cloudformation deploy --stack-name AdminPortalStack --region ${AWS_REGION} --template-file adminPortal.template --parameter-overrides RouteName=${params.RouteName} BaseStackName=${params.BaseStackName} CertificateArn=${params.CertificateArn} --capabilities CAPABILITY_NAMED_IAM"
             }
         }
     }
