@@ -12,14 +12,14 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-          - DomainName: !Join
-              - ""
-              - - "origin-access-identity/cloudfront/"
-                - Fn::ImportValue: !Sub "${BaseStackName}-AdminPortalDomainName"
+          - DomainName:
+              Fn::ImportValue: !Sub "${BaseStackName}-AdminPortalDomainName"
             Id: "S3-admin-portal"
             S3OriginConfig:
-              OriginAccessIdentity:
-                Fn::ImportValue: !Sub "${BaseStackName}-S3AccessIdentity"
+              OriginAccessIdentity: !Join
+                - ""
+                - - "origin-access-identity/cloudfront/"
+                  - Fn::ImportValue: !Sub "${BaseStackName}-S3AccessIdentity"
         IPV6Enabled: false
         DefaultCacheBehavior:
           AllowedMethods:
