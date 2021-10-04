@@ -45,6 +45,8 @@ Resources:
         HttpVersion: http2
         ViewerCertificate:
           AcmCertificateArn: !Ref CertificateArn
+          CloudFrontDefaultCertificate: false
+          MinimumProtocolVersion: TLSv1.2_2018
           SslSupportMethod: "sni-only"
       Tags:
         - Key: name
