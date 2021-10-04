@@ -2,7 +2,7 @@ pipline {
     agent any
     parameters {
         string(name: 'RouteName', description: 'name for cloudfront distribution alias')
-        string(name: 'BaseStackName' description: 'name of base infrastructure stack')
+        string(name: 'BaseStackName', description: 'name of base infrastructure stack')
         string(name: 'BucketName', description: 'name of bucket to upload to')
     }
     tools {
