@@ -44,8 +44,8 @@ Resources:
         ViewerCertificate:
           AcmCertificateArn:
             Fn::ImportValue: !Sub "${BaseStackName}-CertificateARN"
+          MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
-          MinimumProtocolVersion: TLSv1.2_2018
       Tags:
         - Key: name
           Value: "AdminDistribution"
