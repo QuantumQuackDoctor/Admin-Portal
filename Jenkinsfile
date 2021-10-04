@@ -1,4 +1,4 @@
-pipline {
+pipeline {
     agent any
     parameters {
         string(name: 'RouteName', description: 'name for cloudfront distribution alias')
