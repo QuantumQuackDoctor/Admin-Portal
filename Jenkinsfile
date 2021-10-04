@@ -3,6 +3,7 @@ pipline {
     parameters {
         string(name: 'RouteName', description: 'name for cloudfront distribution alias')
         string(name: 'BaseStackName' description: 'name of base infrastructure stack')
+        string(name: 'BucketName', description: 'name of bucket to upload to')
     }
     tools {
         nodejs "Node 14"
@@ -25,8 +26,8 @@ pipline {
         }
         stage('Upload S3'){
             steps {
-                s3Delete(bucket:'admin-portal', path:'')
-                s3Upload(file: 'build', bucket:'admin-portal')
+                s3Delete(bucket:'${params.BucketName}', path:'')
+                s3Upload(file: 'build', bucket:'${params.BucketName}')
             }
         }
         stage('Create Distribution'){
