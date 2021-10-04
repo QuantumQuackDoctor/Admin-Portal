@@ -1,0 +1,19 @@
+.CRCsv-form {
+  color: var(--color-main);
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding-top: 1em;
+}
+
+.CRCsv-form input[type="file"] {
+  display: none;
+}
+
+.CRCsv-form p {
+  margin: 0;
+}
+
+.CRCsv-file div {
+  text-align: center;
+}
