@@ -1,9 +1,9 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'RouteName', description: 'name for cloudfront distribution alias')
-        string(name: 'BaseStackName', description: 'name of base infrastructure stack')
-        string(name: 'BucketName', description: 'name of bucket to upload to')
+        string(name: 'RouteName', description: 'name for cloudfront distribution alias', defaultValue: params.RouteName ?: 'admin')
+        string(name: 'BaseStackName', description: 'name of base infrastructure stack', defaultValue: params.BaseStackName ?: 'BaseInfrastructure')
+        string(name: 'BucketName', description: 'name of bucket to upload to', defaultValue: params.BucketName ?: '')
     }
     tools {
         nodejs "Node 14"
