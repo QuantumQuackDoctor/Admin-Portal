@@ -49,16 +49,14 @@ Resources:
       Tags:
         - Key: name
           Value: "AdminDistribution"
-  route53RS:
+  RecordSet:
     Type: AWS::Route53::RecordSet
     Properties:
       Name: !Ref RouteName
       Comment: "points to admin portal cloudfront distribution"
-      AliasTarget:
-        DNSName: !GetAtt CloudfrontDistribution.DomainName
-        EvaluateTargetHealth: false
-        HostedZoneId:
-          Fn::ImportValue: !Sub "${BaseStackName}-HostedZoneId"
       HostedZoneId:
         Fn::ImportValue: !Sub "${BaseStackName}-HostedZoneId"
-      Type: A
+      Type: CNAME
+      TTL: 900
+      ResourceRecords:
+        - !GetAtt CloudfrontDistribution.DomainName
