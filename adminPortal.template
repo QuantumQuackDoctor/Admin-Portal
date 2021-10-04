@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "this template creates a cloudfront distribution for a bucket"
+
+Parameters:
+  RouteName:
+    Type: String
+  BaseStackName:
+    Type: String
+Resources:
+  CloudfrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !Join
+              - ""
+              - - "origin-access-identity/cloudfront/"
+                - Fn::ImportValue: !Sub "${BaseStackName}-AdminPortalDomainName"
+            Id: "S3-admin-portal"
+            S3OriginConfig:
+              OriginAccessIdentity:
+                Fn::ImportValue: !Sub "${BaseStackName}-S3AccessIdentity"
+        IPV6Enabled: false
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          CachedMethods:
+            - GET
+            - HEAD
+          ForwardedValues:
+            QueryString: true
+          TargetOriginId: "S3-admin-portal"
+          ViewerProtocolPolicy: redirect-to-https
+        Aliases:
+          - !Ref RouteName
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+        DefaultRootObject: index.html
+        Enabled: true
+        HttpVersion: http2
+        ViewerCertificate:
+          AcmCertificateArn:
+            Fn::ImportValue: !Sub "${BaseStackName}-CertificateARN"
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2018
+      Tags:
+        - Key: name
+          Value: "AdminDistribution"
+  route53RS:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: !Ref RouteName
+      Comment: "points to admin portal cloudfront distribution"
+      AliasTarget:
+        DNSName: !GetAtt CloudfrontDistribution.DomainName
+        EvaluateTargetHealth: false
+        HostedZoneId:
+          Fn::ImportValue: !Sub "${BaseStackName}-HostedZoneId"
+      HostedZoneId:
+        Fn::ImportValue: !Sub "${BaseStackName}-HostedZoneId"
+      Type: A
