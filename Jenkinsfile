@@ -26,13 +26,13 @@ pipeline {
         }
         stage('Upload S3'){
             steps {
-                s3Delete(bucket:'${params.BucketName}', path:'')
-                s3Upload(file: 'build', bucket:'${params.BucketName}')
+                s3Delete(bucket:"${params.BucketName}", path:'')
+                s3Upload(file: 'build', bucket:"${params.BucketName}")
             }
         }
         stage('Create Distribution'){
             steps {
-                sh 'aws cloudformation deploy --stack-name AdminPortalStack --region ${AWS_REGION} --template-file adminPortal.template --parameter-overrides RouteName=${params.RouteName} BaseStackName=${params.BaseStackName} --capabilities CAPABILITY-NAMED-IAM'
+                sh "aws cloudformation deploy --stack-name AdminPortalStack --region ${AWS_REGION} --template-file adminPortal.template --parameter-overrides RouteName=${params.RouteName} BaseStackName=${params.BaseStackName} --capabilities CAPABILITY-NAMED-IAM"
             }
         }
     }
