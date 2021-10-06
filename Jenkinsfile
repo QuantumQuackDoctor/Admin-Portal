@@ -32,7 +32,7 @@ pipeline {
         }
         stage('Create Distribution'){
             steps {
-                sh "aws cloudformation deploy --stack-name AdminPortalStack --region ${AWS_REGION} --template-file adminPortal.template --parameter-overrides RouteName=${params.RouteName} BaseStackName=${params.BaseStackName} --capabilities CAPABILITY_NAMED_IAM"
+                sh "aws cloudformation deploy --stack-name AdminPortalStack --region ${AWS_REGION} --template-file adminPortal.template --parameter-overrides RouteName=${params.RouteName}  --capabilities CAPABILITY_NAMED_IAM"
             }
         }
     }
