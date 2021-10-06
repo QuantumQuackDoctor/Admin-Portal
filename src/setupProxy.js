@@ -13,4 +13,10 @@ module.exports = function (app) {
       target: "http://localhost:8080",
     })
   );
+  app.use(
+    "/restaurants",
+    createProxyMiddleware({
+      target: "http://localhost:8082",
+    })
+  );
 };
