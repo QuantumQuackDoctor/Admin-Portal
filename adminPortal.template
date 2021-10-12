@@ -23,7 +23,7 @@ Resources:
               OriginAccessIdentity: !Join
                 - ""
                 - - "origin-access-identity/cloudfront/"
-                  - "{{resolve:secretsmanager:S3AccessIdentity}}"
+                  - !Sub "{{resolve:secretsmanager:S3AccessIdentity-${Environment}}}"
         IPV6Enabled: false
         DefaultCacheBehavior:
           AllowedMethods:
