@@ -46,7 +46,7 @@ Resources:
         Enabled: true
         HttpVersion: http2
         ViewerCertificate:
-          AcmCertificateArn: !Sub "{{resolve:secrestsmanager:CertificateARN-${Environment}}}"
+          AcmCertificateArn: !Sub "{{resolve:secretsmanager:CertificateARN-${Environment}}}"
           MinimumProtocolVersion: TLSv1.2_2018
           SslSupportMethod: "sni-only"
       Tags:
