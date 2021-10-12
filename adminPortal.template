@@ -4,13 +4,20 @@ Description: "this template creates a cloudfront distribution for a bucket"
 Parameters:
   RouteName:
     Type: String
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues:
+      - "prod"
+      - "dev"
+      - "test"
 Resources:
   CloudfrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
         Origins:
-          - DomainName: "{{resolve:secretsmanager:AdminPortalDomainName}}"
+          - DomainName: !Sub "{{resolve:secretsmanager:AdminPortalDomainName-${Environment}}}"
             Id: "S3-admin-portal"
             S3OriginConfig:
               OriginAccessIdentity: !Join
@@ -39,7 +46,7 @@ Resources:
         Enabled: true
         HttpVersion: http2
         ViewerCertificate:
-          AcmCertificateArn: "{{resolve:secrestsmanager:CertificateARN}}"
+          AcmCertificateArn: !Sub "{{resolve:secrestsmanager:CertificateARN-${Environment}}}"
           MinimumProtocolVersion: TLSv1.2_2018
           SslSupportMethod: "sni-only"
       Tags:
@@ -50,7 +57,7 @@ Resources:
     Properties:
       Name: !Ref RouteName
       Comment: "points to admin portal cloudfront distribution"
-      HostedZoneId: "{{resolve:secretsmanager:HostedZoneId}}"
+      HostedZoneId: !Sub "{{resolve:secretsmanager:HostedZoneId-${Environment}}}"
       Type: CNAME
       TTL: 900
       ResourceRecords:
