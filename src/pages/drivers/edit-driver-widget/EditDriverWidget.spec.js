@@ -2,6 +2,7 @@ import { render, waitFor, screen, fireEvent } from "@testing-library/react";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import EditDriverWidget from "./EditDriverWidget";
+import React from "react";
 
 describe("EditDriverWidget test", () => {
   const adapter = new MockAdapter(axios);
@@ -101,7 +102,7 @@ describe("EditDriverWidget test", () => {
 
   it("deletes driver", async () => {
     var httpSpy = false;
-    adapter.onDelete("/accounts/driver/1").reply((req) => {
+    adapter.onDelete("/accounts/driver/1").reply(() => {
       httpSpy = true;
       return [200];
     });
