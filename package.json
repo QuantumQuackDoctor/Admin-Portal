@@ -48,6 +48,9 @@
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.19.0",
+    "eslint": "^7.32.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.26.1",
     "http-proxy-middleware": "^2.0.1",
     "miragejs": "^0.1.41"
   }
