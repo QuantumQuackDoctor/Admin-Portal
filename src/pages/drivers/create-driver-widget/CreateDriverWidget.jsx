@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import { propTypes } from "react-bootstrap/esm/Image";
+import PropTypes from "prop-types";
+
 import {
   FaLock,
   FaCar,
@@ -115,6 +116,6 @@ const CreateDriverWidget = ({ openDriver }) => {
 };
 
 CreateDriverWidget.propTypes = {
-  openDriver: propTypes.element.isRequired,
+  openDriver: PropTypes.func,
 };
 export default CreateDriverWidget;
