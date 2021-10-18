@@ -1,3 +1,5 @@
+import React from "react";
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { FaEnvelope } from "react-icons/fa";
 import {
@@ -21,7 +23,7 @@ const EditDriverWidget = ({ id, close }) => {
       .then((res) => {
         setDriver(res.data);
       })
-      .catch((e) => {
+      .catch(() => {
         close();
       });
   };
@@ -167,6 +169,11 @@ const EditDriverWidget = ({ id, close }) => {
       {driver.email ? builder.build(submitFunction) : <div>Loading</div>}
     </div>
   );
+};
+
+EditDriverWidget.propTypes = {
+  id: PropTypes.number,
+  close: PropTypes.func,
 };
 
 export default EditDriverWidget;

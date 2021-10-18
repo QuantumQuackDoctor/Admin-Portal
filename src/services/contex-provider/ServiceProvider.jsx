@@ -1,3 +1,5 @@
+import React from "react";
+import PropTypes from "prop-types";
 import { createContext, useContext } from "react";
 import AuthService from "../AuthService";
 
@@ -13,6 +15,10 @@ const ServiceProvider = ({ children }) => {
       {[children].flat()}
     </ServiceContext.Provider>
   );
+};
+
+ServiceProvider.propTypes = {
+  children: PropTypes.any,
 };
 
 /**

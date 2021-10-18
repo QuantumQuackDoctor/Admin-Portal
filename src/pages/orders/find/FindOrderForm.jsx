@@ -1,3 +1,5 @@
+import React from "react";
+import PropTypes from "prop-types";
 import { FormBuilder } from "../../../shared/form-widget/FormWidget";
 import { FaHashtag } from "react-icons/fa";
 import { useState } from "react";
@@ -17,7 +19,7 @@ const FindOrderForm = ({ openOrder }) => {
 
   const submitFunction = ({ id }, resetFields) => {
     getOrder(id)
-      .then((res) => {
+      .then(() => {
         openOrder(id);
         resetFields();
         setErrorMessage("");
@@ -28,6 +30,10 @@ const FindOrderForm = ({ openOrder }) => {
   };
 
   return <>{builder.build(submitFunction)}</>;
+};
+
+FindOrderForm.propTypes = {
+  openOrder: PropTypes.func,
 };
 
 export default FindOrderForm;

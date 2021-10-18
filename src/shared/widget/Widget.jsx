@@ -1,7 +1,10 @@
+import React from "react";
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Masonry from "react-masonry-component";
 import "./Widgets.css";
+
 /**
  *  Provides a common theme and a toggleDisplay method to child components
  * @param {*} param0
@@ -42,6 +45,13 @@ export const Widget = ({ children, title, rows, columns }) => {
   );
 };
 
+Widget.propTypes = {
+  children: PropTypes.any,
+  title: PropTypes.string,
+  rows: PropTypes.number,
+  columns: PropTypes.number,
+};
+
 /**
  *  provides a grid for placing widgets
  * @returns
@@ -52,4 +62,8 @@ export const WidgetContainer = ({ children }) => {
       {[children].flat()}
     </Masonry>
   );
+};
+
+WidgetContainer.propTypes = {
+  children: PropTypes.any,
 };

@@ -1,3 +1,4 @@
+import React from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { FormBuilder, Validators } from "../form-widget/FormWidget";
 import { useEffect, useState } from "react";

@@ -1,3 +1,5 @@
+import React from "react";
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { getCurrentUser } from "../../../services/UserService";
 import { Widget } from "../../../shared/widget/Widget";
@@ -58,6 +60,10 @@ const UserWidget = ({ authenticated }) => {
       )}
     </>
   );
+};
+
+UserWidget.propTypes = {
+  authenticated: PropTypes.bool,
 };
 
 export default UserWidget;

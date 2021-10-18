@@ -1,4 +1,6 @@
 import { FaCalendar, FaEnvelope, FaIdCard, FaLock } from "react-icons/fa";
+import React from "react";
+import PropTypes from "prop-types";
 import {
   FormBuilder,
   Validators,
@@ -56,7 +58,7 @@ const RegisterForm = ({ authenticated }) => {
       canSubmit = false;
       let userData = changeFormDataToUser(userFields);
       register(userData).then(
-        (res) => {
+        () => {
           setRegistrationFinished(true);
         },
         (err) => {
@@ -105,6 +107,10 @@ const RegisterForm = ({ authenticated }) => {
         : builder.build(submitFunction)}
     </>
   );
+};
+
+RegisterForm.propTypes = {
+  authenticated: PropTypes.bool,
 };
 
 export default RegisterForm;
