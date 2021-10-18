@@ -1,4 +1,5 @@
 import Header from "../../shared/header/Header";
+import React from "react";
 import { WidgetContainer } from "../../shared/widget/Widget";
 import LoginForm from "../../shared/login-form/LoginForm";
 import RegisterForm from "./register-form/RegisterForm";

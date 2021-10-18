@@ -1,3 +1,4 @@
+import React from "react";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { activate } from "../../services/AuthService";
@@ -12,7 +13,7 @@ const Activate = () => {
   });
   useEffect(() => {
     activate(token).then(
-      (res) => {
+      () => {
         setActivationStatus({
           loading: false,
           error: false,
