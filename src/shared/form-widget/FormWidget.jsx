@@ -1,3 +1,5 @@
+import React from "react";
+import PropTypes from "prop-types";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import { Widget } from "../widget/Widget";
@@ -189,6 +191,16 @@ const FormWidget = ({
   );
 };
 
+FormWidget.propTypes = {
+  title: PropTypes.string,
+  fields: PropTypes.array,
+  onSubmit: PropTypes.func,
+  errorMessage: PropTypes.string,
+  submitText: PropTypes.string,
+  children: PropTypes.any,
+  showReset: PropTypes.bool,
+};
+
 export default FormWidget;
 
 /**
@@ -289,9 +301,10 @@ export class FormBuilder {
         onSubmit={onSubmit}
         errorMessage={this.errorMessage}
         submitText={this.submitText}
-        children={this.childComponent}
         showReset={this.showReset}
-      />
+      >
+        {this.childComponent}
+      </FormWidget>
     );
   }
 }
@@ -383,7 +396,7 @@ export const Validators = {
    * @returns
    */
   Pattern: (regex) => {
-    if (!regex instanceof RegExp) regex = new RegExp(regex);
+    if (!(regex instanceof RegExp)) regex = new RegExp(regex);
     return (input) => {
       return regex.test(input);
     };

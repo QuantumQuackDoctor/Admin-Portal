@@ -1,3 +1,5 @@
+import React from "react";
+import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { getOrder, updateOrder } from "../../../services/OrderService";
@@ -59,7 +61,9 @@ const DeleteOrderForm = ({ id, close }) => {
         console.log(request);
         setOrders(request.data);
         return request;
-      } catch (err) {}
+      } catch (err) {
+        close();
+      }
     }
     fetchData().then((res) => {
       localStorage.setItem(id, JSON.stringify(res.data));
@@ -457,14 +461,14 @@ const DeleteOrderForm = ({ id, close }) => {
         <Modal.Body>
           This will not update the order until the update button is pressed
           <Form>
-            <div>Enter Time in format "HH:MM"</div>
+            <div>Enter Time in format &quot;HH:MM&quot;</div>
             <Form.Control
               type="text"
               placeholder="Enter new Time"
               value={updateTimeField}
               onChange={(e) => setUpdateTimeField(e.target.value)}
             />
-            <div>Enter Date in format "YYYY-MM-DD"</div>
+            <div>Enter Date in format &quot;YYYY-MM-DD&quot;</div>
             <Form.Control
               type="text"
               placeholder="Enter new Date"
@@ -482,6 +486,11 @@ const DeleteOrderForm = ({ id, close }) => {
       </Modal>
     </Widget>
   );
+};
+
+DeleteOrderForm.propTypes = {
+  id: PropTypes.number,
+  close: PropTypes.func,
 };
 
 export default DeleteOrderForm;

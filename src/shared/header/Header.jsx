@@ -1,3 +1,5 @@
+import React from "react";
+import PropTypes from "prop-types";
 import "./Header.css";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -21,6 +23,7 @@ const paths = [
   { name: "Restaurants", icon: <FaHamburger />, path: "/restaurants" },
   { name: "Account", icon: <FaUserEdit />, path: "/account" },
 ];
+
 const Header = ({ children }) => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
@@ -62,6 +65,10 @@ const Header = ({ children }) => {
       </nav>
     </div>
   );
+};
+
+Header.propTypes = {
+  children: PropTypes.any,
 };
 
 export default Header;
