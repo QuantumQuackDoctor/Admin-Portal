@@ -8,4 +8,4 @@ const prod = {
   basePath: "https://api.drscrumptious.com",
 };
 
-export default process.env.REACT_APP_STAGE === "prod" ? prod : dev;
+export default process.env.NODE_ENV === "production" ? prod : dev;

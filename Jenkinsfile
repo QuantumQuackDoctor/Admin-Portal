@@ -9,9 +9,6 @@ pipeline {
     tools {
         nodejs "Node 14"
     }
-    environment {
-        REACT_APP_STAGE=prod
-    }
     stages {
         stage('Install Dependencies'){
             steps {
