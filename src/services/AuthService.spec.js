@@ -31,7 +31,7 @@ describe("Auth service tests", () => {
 
   it("logout on 401", async () => {
     expect(authService.isAuthenticated).toBeTruthy();
-    let res = await axios.get("/unauthorized").catch((error) => {
+    await axios.get("/unauthorized").catch((error) => {
       return error;
     });
     expect(authService.isAuthenticated).toBeFalsy();

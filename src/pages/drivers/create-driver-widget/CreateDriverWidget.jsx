@@ -1,4 +1,7 @@
+import React from "react";
 import { useState } from "react";
+import PropTypes from "prop-types";
+
 import {
   FaLock,
   FaCar,
@@ -112,4 +115,7 @@ const CreateDriverWidget = ({ openDriver }) => {
   return <>{builder.build(submitFn)}</>;
 };
 
+CreateDriverWidget.propTypes = {
+  openDriver: PropTypes.func,
+};
 export default CreateDriverWidget;
