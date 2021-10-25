@@ -1,11 +1,7 @@
 import process from "process";
 
-const dev = {
-  basePath: "",
+const environment = {
+  basePath: process.env.REACT_APP_API_ENDPOINT,
 };
 
-const prod = {
-  basePath: "https://api.drscrumptious.com",
-};
-
-export default process.env.NODE_ENV === "production" ? prod : dev;
+export default environment;
