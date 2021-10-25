@@ -1,7 +1,10 @@
-import process from "process";
-
-const environment = {
-  basePath: process.env.REACT_APP_API_ENDPOINT,
+const dev = {
+  basePath: "",
 };
 
-export default environment;
+const prod = {
+  basePath: "https://api.drscrumptious.com",
+};
+
+// eslint-disable-next-line no-undef
+export default process.env.NODE_ENV === "production" ? prod : dev;
