@@ -1,8 +1,11 @@
 import React from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
-import { FormBuilder, Validators } from "../form-widget/FormWidget";
+import {
+  FormBuilder,
+  Validators,
+} from "../../../shared/form-widget/FormWidget";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../services/contex-provider/ServiceProvider";
+import { useAuth } from "../../../services/contex-provider/ServiceProvider";
 const LoginForm = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const authService = useAuth();
