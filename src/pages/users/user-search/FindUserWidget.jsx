@@ -21,16 +21,18 @@ const FindUserWidget = ({ openUser }) => {
     .setErrorMessage("must be valid email")
     .addValidator(Validators.Pattern(/(^$|^.*@.*\..*$)/));
 
-  const submitFunction = async (data) => {
+  const submitFunction = async (data, reset) => {
     try {
       if (data.id) {
         await getUserById(data.id);
         openUser(data.id);
         setErrorMessage("");
+        reset();
       } else if (data.email) {
         let res = await getUserByEmail(data.email);
         openUser(res.data.id);
         setErrorMessage("");
+        reset();
       } else {
         setErrorMessage("id or email required");
       }

@@ -20,3 +20,12 @@ export const getUserById = (id) => {
 export const getUserByEmail = (email) => {
   return axios.get(environment.basePath + "/accounts/users?email=" + email);
 };
+
+export const updateUser = (user, updatePassword) => {
+  if (updatePassword === false) user.password = "123456789";
+  return axios.post(
+    environment.basePath +
+      `/accounts/user/update?update-password=${updatePassword}`,
+    user
+  );
+};
