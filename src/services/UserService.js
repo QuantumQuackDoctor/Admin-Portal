@@ -18,7 +18,7 @@ export const getUserById = (id) => {
  * @param {string} email
  */
 export const getUserByEmail = (email) => {
-  return axios.get(environment.basePath + "/accounts/users?email=" + email);
+  return axios.get(`${environment.basePath}/accounts/users?email=${email}`);
 };
 
 export const updateUser = (user, updatePassword) => {
@@ -28,4 +28,8 @@ export const updateUser = (user, updatePassword) => {
       `/accounts/user/update?update-password=${updatePassword}`,
     user
   );
+};
+
+export const deleteUser = (id) => {
+  return axios.delete(`/accounts/user/${id}`);
 };

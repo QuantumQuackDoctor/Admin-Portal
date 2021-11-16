@@ -21,32 +21,32 @@ const FindUserWidget = ({ openUser }) => {
     .setErrorMessage("must be valid email")
     .addValidator(Validators.Pattern(/(^$|^.*@.*\..*$)/));
 
-  const submitFunction = async (data, reset) => {
-    try {
-      if (data.id) {
-        await getUserById(data.id);
-        openUser(data.id);
-        setErrorMessage("");
-        reset();
-      } else if (data.email) {
-        let res = await getUserByEmail(data.email);
-        openUser(res.data.id);
-        setErrorMessage("");
-        reset();
-      } else {
-        setErrorMessage("id or email required");
-      }
-    } catch (err) {
-      switch (err.status) {
-        case 400:
-          setErrorMessage("id or email invalid");
-          break;
-        case 404:
-          setErrorMessage("user not found");
-          break;
-        default:
-          setErrorMessage("server error");
-      }
+  const submitFunction = (data, reset) => {
+    if (data.id) {
+      getUserById(data.id).then(onSuccess, displayError);
+    } else if (data.email) {
+      getUserByEmail(data.email).then(onSuccess, displayError);
+    } else {
+      setErrorMessage("id or email required");
+    }
+    reset();
+  };
+
+  const onSuccess = (res) => {
+    openUser(res.data.id);
+    setErrorMessage("");
+  };
+
+  const displayError = (err) => {
+    switch (err.response.status) {
+      case 400:
+        setErrorMessage("id or email invalid");
+        break;
+      case 404:
+        setErrorMessage("user not found");
+        break;
+      default:
+        setErrorMessage("server error");
     }
   };
   return <>{builder.build(submitFunction)}</>;

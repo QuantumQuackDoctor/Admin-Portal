@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { getUserById, updateUser } from "../../../services/UserService";
+import {
+  deleteUser,
+  getUserById,
+  updateUser,
+} from "../../../services/UserService";
 import {
   FormBuilder,
   Validators,
@@ -54,6 +58,35 @@ const DisplayUserWidget = ({ id, close }) => {
     }
   };
 
+  const [deleteClicked, setDeleteClicked] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false);
+
+  const handleDeleteClicked = () => {
+    if (!deleteClicked && user.id) {
+      setFadeOut(true);
+      setTimeout(() => {
+        setFadeOut(false);
+        setDeleteClicked(true);
+      }, 200);
+    } else {
+      deleteUser(user.id)
+        .then(() => {
+          close();
+        })
+        .catch((err) => {
+          switch (err.response.status) {
+            case 404:
+              setErrorMessage("*User does not exist");
+              setTimeout(() => close(), 1000);
+              break;
+            default:
+              setErrorMessage("*Server error");
+              break;
+          }
+        });
+    }
+  };
+
   builder
     .setChildComponent(
       <div>
@@ -63,6 +96,20 @@ const DisplayUserWidget = ({ id, close }) => {
           onClick={() => close()}
         >
           Close
+        </button>
+        <button
+          className="FormWidget-submit"
+          style={{ width: "100%", backgroundColor: "red" }}
+          onClick={handleDeleteClicked}
+          data-testid="delete-button"
+        >
+          <span
+            className={
+              fadeOut ? "EditDriverWidget-fadeout" : "EditDriverWidget-fadein"
+            }
+          >
+            {deleteClicked ? "Confirm Delete" : "Delete"}
+          </span>
         </button>
       </div>
     )
