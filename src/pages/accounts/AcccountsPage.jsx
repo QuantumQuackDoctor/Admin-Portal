@@ -1,11 +1,12 @@
 import Header from "../../shared/header/Header";
 import React from "react";
 import { WidgetContainer } from "../../shared/widget/Widget";
-import LoginForm from "../../shared/login-form/LoginForm";
+import LoginForm from "./login-form/LoginForm";
 import RegisterForm from "./register-form/RegisterForm";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../services/contex-provider/ServiceProvider";
 import UserWidget from "./user-widget/UserWidget";
+import ForgotPassword from "./forgot-password/ForgotPassword";
 
 const AccountsPage = () => {
   const [authenticated, setAuthenticated] = useState(false);
@@ -25,6 +26,7 @@ const AccountsPage = () => {
         <LoginForm />
         <RegisterForm authenticated={authenticated} />
         <UserWidget authenticated={authenticated} />
+        <ForgotPassword authenticated={authenticated} />
       </WidgetContainer>
     </Header>
   );

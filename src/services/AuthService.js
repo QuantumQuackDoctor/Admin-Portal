@@ -102,3 +102,16 @@ export function register(body) {
 export function activate(token) {
   return axios.post(environment.basePath + `/accounts/activate/${token}`, {});
 }
+
+export function requestResetPassword(email) {
+  return axios.get(
+    environment.basePath + `/accounts/reset-password/admin/${email}`
+  );
+}
+
+export function updatePassword(token, password) {
+  return axios.post(environment.basePath + "/accounts/reset-password", {
+    newPassword: password,
+    token,
+  });
+}

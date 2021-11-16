@@ -9,6 +9,7 @@ import OrdersPage from "./pages/orders/OrdersPage";
 import RestaurantsPage from "./pages/restaurants/RestaurantsPage";
 import DriversPage from "./pages/drivers/DriversPage";
 import Activate from "./pages/activate/Activate";
+import ResetPassword from "./pages/reset-password/ResetPassword";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/restaurants" component={RestaurantsPage} />
           <Route path="/account" component={AccountsPage} />
           <Route path="/activate/:token" component={Activate} />
+          <Route path="/reset-password/:token" component={ResetPassword} />
         </Switch>
       </ServiceProvider>
     </BrowserRouter>
