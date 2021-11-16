@@ -24,7 +24,7 @@ const FormWidget = ({
     return {
       id: index,
       name: field.name,
-      currentValue: field.initValue || "",
+      currentValue: field.initValue !== undefined ? field.initValue : "",
       validators: field.validators,
       displayError: false,
     };
@@ -351,6 +351,8 @@ export class FormFieldBuilder {
 
   setInputType(inputType) {
     this.fieldValues.inputType = inputType;
+    if (inputType === "checkbox")
+      this.fieldValues.initValue = !!this.fieldValues.initValue;
     return this;
   }
 
