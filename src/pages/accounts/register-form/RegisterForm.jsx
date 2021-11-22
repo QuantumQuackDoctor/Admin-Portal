@@ -22,10 +22,12 @@ const RegisterForm = ({ authenticated }) => {
     .and()
 
     .addField("Password", "password")
-    .addValidator(Validators.Min(8))
+    .addValidator(Validators.OrNull(Validators.Password))
     .setPlaceholder("password")
     .setIcon(<FaLock />)
-    .setErrorMessage("*password not long enough")
+    .setErrorMessage(
+      "*password must have 1 Uppercase, Number, and special character"
+    )
     .setInputType("password")
     .setDesiredRow(1)
     .and()

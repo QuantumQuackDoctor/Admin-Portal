@@ -33,8 +33,10 @@ const LoginForm = () => {
     .and()
 
     .addField("Password", "password")
-    .addValidator(Validators.Min(8))
-    .setErrorMessage("*password must be 8 characters or more")
+    .addValidator(Validators.Password)
+    .setErrorMessage(
+      "*password must have 1 Uppercase, Number, and special character"
+    )
     .setInputType("password")
     .setPlaceholder("password")
     .setIcon(<FaLock />);
