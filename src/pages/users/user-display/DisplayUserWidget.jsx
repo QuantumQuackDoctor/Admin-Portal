@@ -126,10 +126,10 @@ const DisplayUserWidget = ({ id, close }) => {
 
     .addField("Password", "password")
     .setIcon(<FaLock />)
-    .addValidator((input) => {
-      return input === "" || input.length >= 8;
-    })
-    .setErrorMessage("*password must be at least 8 characters")
+    .addValidator(Validators.OrNull(Validators.Password))
+    .setErrorMessage(
+      "*password must have 1 Uppercase, Number, and Special character"
+    )
     .and()
 
     .addField("First name", "firstName")

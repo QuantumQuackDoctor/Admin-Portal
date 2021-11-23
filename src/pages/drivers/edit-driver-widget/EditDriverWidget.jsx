@@ -91,11 +91,11 @@ const EditDriverWidget = ({ id, close }) => {
     .and()
 
     .addField("Password", "password")
-    .addValidator((input) => {
-      return input === "" || input.length >= 8;
-    })
+    .addValidator(Validators.OrNull(Validators.Password))
     .setIcon(<FaLock />)
-    .setErrorMessage("*password not long enough")
+    .setErrorMessage(
+      "*password must have 1 Uppercase, Number, and Special character"
+    )
     .and()
 
     .addField("First name", "firstName")
@@ -145,7 +145,7 @@ const EditDriverWidget = ({ id, close }) => {
     let tempDriver = {
       ...driver,
       ...data,
-      password: updatePassword ? data.password : "11111111",
+      password: updatePassword ? data.password : "PlaceHolde11111111##@r",
     };
     updateDriver(tempDriver, updatePassword)
       .then(async () => {

@@ -449,4 +449,18 @@ export const Validators = {
       return ageDate.getUTCFullYear() - 1970 >= age;
     };
   },
+  Password: (input) => {
+    if (input === null || input === undefined || input.length < 8) return false;
+    if (/\s/.test(input)) return false;
+    if (!/[^a-zA-Z0-9]/.test(input)) return false;
+    if (!/[A-Z]/.test(input)) return false;
+    if (!/[0-9]/.test(input)) return false;
+    return true;
+  },
+  OrNull: (validator) => {
+    return (input) => {
+      if (input === null || input === undefined || input === "") return true;
+      else return validator(input);
+    };
+  },
 };

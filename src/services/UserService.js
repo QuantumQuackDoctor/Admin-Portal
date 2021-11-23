@@ -22,7 +22,8 @@ export const getUserByEmail = (email) => {
 };
 
 export const updateUser = (user, updatePassword) => {
-  if (updatePassword === false) user.password = "123456789";
+  if (updatePassword === false)
+    user.password = "PlaceHolderPassword1!#!13@)@#*&!(";
   return axios.post(
     environment.basePath +
       `/accounts/user/update?update-password=${updatePassword}`,

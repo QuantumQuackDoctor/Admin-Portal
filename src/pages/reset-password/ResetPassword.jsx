@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { InputGroup } from "react-bootstrap";
 import { useHistory, useParams } from "react-router";
 import { updatePassword } from "../../services/AuthService";
+import { Validators } from "../../shared/form-widget/FormWidget";
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -21,6 +22,8 @@ const ResetPassword = () => {
 
   const history = useHistory();
 
+  const validatePassword = Validators.OrNull(Validators.Password);
+
   const passwordUpdator = (event) => {
     setPassword({
       value: event.target.value,
@@ -35,10 +38,6 @@ const ResetPassword = () => {
       valid: event.target.value === password.value,
       touched: true,
     });
-  };
-
-  const validatePassword = (password) => {
-    return password.length >= 8;
   };
 
   const submitFunc = async (e) => {
@@ -88,7 +87,7 @@ const ResetPassword = () => {
             </label>
             {!password.valid && password.touched ? (
               <div style={{ color: "red" }}>
-                *Password must be 8 or more characters
+                *password must have 1 Uppercase, Number, and special character
               </div>
             ) : (
               ""
